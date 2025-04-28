@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OPEN TAG READER</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-on {
+            background-color: green;
+            color: white;
+        }
+
+        .button-off {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>OPEN TAG READER</h1>
+    <button id="toggleButton" class="button-off">OFF</button>
+
+    <script>
+        const toggleButton = document.getElementById('toggleButton');
+        let currentState = 'OFF';
+        const esp32IP = '192.168.4.1'; // Explicitly set the ESP32's IP address
+
+        toggleButton.addEventListener('click', () => {
+            let newState;
+
+            if (currentState === 'OFF') {
+                newState = 'ON';
+                currentState = 'ON';
+                toggleButton.textContent = 'ON';
+                toggleButton.className = 'button-on';
+                console.log('Sending ON command');
+            } else {
+                newState = 'OFF';
+                currentState = 'OFF';
+                toggleButton.textContent = 'OFF';
+                toggleButton.className = 'button-off';
+                console.log('Sending OFF command');
+            }
+
+            const url = `http://${esp32IP}/toggle?state=${newState}`;
+            console.log('Fetching URL:', url);
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('HTTP error!', response.status);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Server response:', data);
+                    // You might want to update UI based on server response here later
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        });
+    </script>
+</body>
+</html>

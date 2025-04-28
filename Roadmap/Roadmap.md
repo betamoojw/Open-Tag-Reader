@@ -23,16 +23,16 @@ The Open-Tag-Reader project is an ESP-based RFID ear tag scanning solution desig
 
 ✅ Define and document coding standards.
 
-🔲 Code for T-Display Plus
+✅ Code for T-Display Plus
 
 ### **Phase 2: Core Functionality Development**
-🔲 Implement reliable RFID tag scanning with ESP-based hardware.
-* Serial Comms
-* Handling/decoding incoming messages
-* Error checking, and duplicate scan handling
-* Switching RFID reader on/off
+✅ Implement reliable RFID tag scanning with ESP-based hardware.
+* Serial Comms  &#x2713;
+* Handling/decoding incoming messages &#x2713;
+* Error checking, and duplicate scan handling &#x2713;
+* Switching RFID reader on/off &#x2713;
 
-🔲 Develop a data processing system to extract and store tag details.
+✅ Develop a data processing system to extract and store tag details.
 * tags.csv - contains tag data
 * Tag Status - Unused, Active, Inactive
 * bucket.csv - bucket file provided by manufacturer
@@ -41,6 +41,7 @@ The Open-Tag-Reader project is an ESP-based RFID ear tag scanning solution desig
 * animals.csv - animal associated with tag 
 * Animal Status - Alive, Dead, Sold
 * records.csv
+* Sessions
 * Groups - user definable - use to count and draft
 * Traits
 * Locations - PIC
@@ -51,8 +52,8 @@ The Open-Tag-Reader project is an ESP-based RFID ear tag scanning solution desig
 * Dogs
 
 🔲 Time setting and timestamping of scan records.
-* RTC integration
-* Time setting manual
+* RTC integration &#x2713;
+* Time setting manual &#x2713;
 * Time setting NTP
 
 🔲 Basic UI
@@ -129,12 +130,6 @@ The Open-Tag-Reader project is an ESP-based RFID ear tag scanning solution desig
 - **Software:** Arduino framework, LittleFS/SD for storage, lightweight web server.
 - **Usability:** Mobile-first design, offline usability, easy CSV integration.
 
-## Next Steps
-- [ ] Review and refine roadmap with community feedback.
-
-- [ ] Prioritize tasks based on immediate project needs.
-
-- [ ] Assign contributors or seek external help where necessary.
 
 ---
 **Feedback & Contributions:** If you’d like to contribute, check out the `CONTRIBUTING.md` (to be created) and browse open issues on GitHub!

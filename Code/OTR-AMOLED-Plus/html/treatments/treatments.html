@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+   <html lang="en">
+
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Livestock Treatment Records</title>
+       <style>
+           body {
+               font-family: sans-serif;
+               margin: 0;
+               padding: 0;
+               height: 100vh;
+               box-sizing: border-box;
+           }
+
+           .container {
+               max-width: 100%;
+               width: 100%;
+               height: 95%;
+               margin: 0;
+               padding: 10px;
+               border: 1px solid #ccc;
+               overflow-x: auto;
+               box-sizing: border-box;
+               display: flex;
+               flex-direction: column;
+           }
+
+           h1 {
+               text-align: center;
+           }
+
+           #treatment-form label {
+               display: block;
+               margin-bottom: 5px;
+               font-weight: bold;
+           }
+
+           #treatment-form input,
+           #treatment-form select,
+           #treatment-form textarea {
+               width: 100%;
+               padding: 8px;
+               margin-bottom: 10px;
+               border: 1px solid #ccc;
+               border-radius: 4px;
+               box-sizing: border-box;
+           }
+
+           #treatment-form .form-row {
+               display: flex;
+               flex-wrap: wrap;
+               gap: 10px;
+               align-items: center;
+               margin-bottom: 10px;
+               box-sizing: border-box;
+           }
+
+           #treatment-form .form-row label {
+               flex: 0 0 150px;
+               text-align: right;
+           }
+
+           #treatment-form .form-row input,
+           #treatment-form .form-row select,
+           #treatment-form .form-row textarea {
+               flex: 1;
+           }
+
+           #treatment-form .form-row.inline-radio-group {
+               display: flex;
+               align-items: center;
+           }
+
+           #treatment-form .form-row.inline-radio-group label {
+               flex: none;
+               text-align: left;
+               margin-right: 10px;
+           }
+
+           #treatment-form .form-row.inline-radio-group select {
+               flex: none;
+               width: auto;
+           }
+
+           #treatment-table {
+               width: 100%;
+               overflow-x: auto;
+               box-sizing: border-box;
+               flex: 1;
+           }
+
+           #treatment-table table {
+               width: 100%;
+               border-collapse: collapse;
+               margin-top: 20px;
+               box-sizing: border-box;
+           }
+
+           #treatment-table th,
+           #treatment-table td {
+               border: 1px solid #ddd;
+               padding: 8px;
+               text-align: left;
+               word-wrap: break-word;
+               white-space: normal;
+               box-sizing: border-box;
+           }
+
+           #treatment-table th {
+               background-color: #f2f2f2;
+               font-size: 0.9em;
+           }
+
+           #treatment-table td {
+               font-size: 0.9em;
+           }
+
+           .form-actions {
+               text-align: right;
+               margin-top: 10px;
+           }
+
+           .form-actions button {
+               padding: 10px 15px;
+               cursor: pointer;
+               margin-left: 10px;
+           }
+
+           .hidden {
+               display: none;
+           }
+
+           .options {
+               text-align: center;
+               margin-bottom: 10px;
+           }
+
+           .options button {
+               padding: 10px 15px;
+               cursor: pointer;
+           }
+
+           .options label {
+               margin: 0 10px;
+           }
+
+           @media (max-width: 992px) {
+               #treatment-table th,
+               #treatment-table td {
+                   padding: 6px;
+               }
+
+               #treatment-form .form-row label {
+                   flex: 0 0 120px;
+               }
+           }
+       </style>
+   </head>
+
+   <body>
+       <div class="container">
+           <h1>Livestock Treatment Records</h1>
+
+           <div class="options">
+               <button onclick="openAddTreatmentForm()">Add New Treatment</button>
+           </div>
+
+           <div id="add-treatment-form" class="hidden">
+               <h2>Add/Edit Treatment</h2>
+               <form id="treatment-form">
+                   <input type="hidden" id="treatmentIndex" name="treatmentIndex">
+
+                   <div class="form-row">
+                       <label for="productName">Product:</label>
+                       <select id="productName" name="productName" required></select>
+                   </div>
+
+                   <div class="form-row">
+                       <label for="batchNumber">Batch Number:</label>
+                       <select id="batchNumber" name="batchNumber" required></select>
+                   </div>
+
+                   <div class="form-row">
+                       <label for="doseValue">Dose:</label>
+                       <input type="number" id="doseValue" name="doseValue" required>
+                       <select id="doseUnit" name="doseUnit" required>
+                           <option value="mL">mL</option>
+                           <option value="mL/L">mL/L</option>
+                           <option value="mL/kg">mL/kg</option>
+                           <option value="mg/kg">mg/kg</option>
+                           <option value="g/head">g/head</option>
+                       </select>
+                       <input type="text" id="approxLiveWeight" name="approxLiveWeight"
+                           placeholder="Approx. Live Weight">
+                   </div>
+
+                   <div class="form-row">
+                       <label for="whp">WHP (days):</label>
+                       <input type="text" id="whp" name="whp" readonly>
+                   </div>
+
+                   <div class="form-row">
+                       <label for="esi">ESI (days):</label>
+                       <input type="text" id="esi" name="esi">
+                   </div>
+
+                   <div class="form-row">
+                       <label for="treatedBy">Treated By (Name & Contact):</label>
+                       <input type="text" id="treatedBy" name="treatedBy" required>
+                   </div>
+
+                   <div class="form-row inline-radio-group">
+                       <label>Adverse Reactions:</label>
+                       <select id="adverseReactions" name="adverseReactions">
+                           <option value="No">No</option>
+                           <option value="Yes">Yes</option>
+                       </select>
+
+                       <label>Broken Needle Still in Animal?:</label>
+                       <select id="brokenNeedle" name="brokenNeedle">
+                           <option value="No">No</option>
+                           <option value="Yes">Yes</option>
+                       </select>
+
+                       <label>Equipment Cleaned/Calibrated?:</label>
+                       <select id="equipCleaned" name="equipCleaned">
+                           <option value="Yes">Yes</option>
+                           <option value="No">No</option>
+                       </select>
+                   </div>
+
+                   <div class="form-row">
+                       <label for="equipCleanedBy">Equipment Cleaned/Calibrated By (Name & Contact):</label>
+                       <input type="text" id="equipCleanedBy" name="equipCleanedBy">
+                   </div>
+
+                   <div class="form-row">
+                       <label for="comments">Comments:</label>
+                       <textarea id="comments" name="comments" rows="4"></textarea>
+                   </div>
+
+                   <div class="form-actions">
+                       <button type="submit">Save Treatment</button>
+                       <button type="button" onclick="closeAddTreatmentForm()">Cancel</button>
+                   </div>
+               </form>
+           </div>
+
+           <div id="treatment-table">
+               <h2>Treatment Records</h2>
+               <table>
+                   <thead>
+                       <tr>
+                           <th>Index</th>
+                           <th>Date</th>
+                           <th>Product</th>
+                           <th>Batch Number</th>
+                           <th>Dose Value</th>
+                           <th>Dose Unit</th>
+                           <th>WHP (days)</th>
+                           <th>ESI (days)</th>
+                           <th>Treated By</th>
+                           <th>Adverse Reactions</th>
+                           <th>Broken Needle?</th>
+                           <th>Equipment Cleaned?</th>
+                           <th>Equipment Cleaned By</th>
+                           <th>Comments</th>
+                       </tr>
+                   </thead>
+                   <tbody></tbody>
+               </table>
+           </div>
+       </div>
+
+       <script>
+           const treatmentForm = document.getElementById('treatment-form');
+           const treatmentTableBody = document.querySelector('#treatment-table tbody');
+           const addTreatmentForm = document.getElementById('add-treatment-form');
+           const productNameSelect = document.getElementById('productName');
+           const batchNumberSelect = document.getElementById('batchNumber');
+           const whpInput = document.getElementById('whp');
+           const esiInput = document.getElementById('esi');
+           const treatmentIndexInput = document.getElementById('treatmentIndex');
+           const doseValueInput = document.getElementById('doseValue');
+           const doseUnitSelect = document.getElementById('doseUnit');
+           const approxLiveWeightInput = document.getElementById('approxLiveWeight');
+
+           let treatmentCounter = 1;
+           let treatments = [];
+           // Dummy chemical inventory data (replace with your actual data source)
+           const chemicalInventory = [
+               { productName: 'Cydectin', batchNumber: 'A123', whp: 28 },
+               { productName: 'Dectomax', batchNumber: 'B456', whp: 42 },
+               { productName: 'Vaccine X', batchNumber: 'C789', whp: 0 },
+           ];
+
+           function populateProductDropdown() {
+               productNameSelect.innerHTML = '<option value="">Select Product</option>';
+               chemicalInventory.forEach(chemical => {
+                   const option = document.createElement('option');
+                   option.value = chemical.productName;
+                   option.textContent = chemical.productName;
+                   productNameSelect.appendChild(option);
+               });
+           }
+
+           function updateBatchNumbers() {
+               batchNumberSelect.innerHTML = '<option value="">Select Batch</option>';
+               const selectedProduct = productNameSelect.value;
+               if (selectedProduct) {
+                   const matchingChemicals = chemicalInventory.filter(chemical => chemical.productName === selectedProduct);
+                   matchingChemicals.forEach(chemical => {
+                       const option = document.createElement('option');
+                       option.value = chemical.batchNumber;
+                       option.textContent = chemical.batchNumber;
+                       batchNumberSelect.appendChild(option);
+                   });
+               }
+               whpInput.value = '';
+               esiInput.value = '';
+           }
+
+           function updateWHP() {
+               const selectedProduct = productNameSelect.value;
+               const selectedBatch = batchNumberSelect.value;
+               if (selectedProduct && selectedBatch) {
+                   const chemical = chemicalInventory.find(chem => chem.productName === selectedProduct && chem.batchNumber === selectedBatch);
+                   if (chemical) {
+                       whpInput.value = chemical.whp;
+                       esiInput.value = chemical.whp;
+                   }
+               }
+           }
+
+           function getNextTreatmentIndex() {
+               return treatmentCounter++;
+           }
+
+           function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                const year = String(date.getFullYear()).slice(-2); // Get last two digits
+                return `${day}/${month}/${year.slice(-2)}`;  // Corrected line
+            } catch (error) {
+                return 'Invalid Date';
+            }
+        }
+
+           function displayTreatments() {
+               treatmentTableBody.innerHTML = '';
+               treatments.forEach(treatment => {
+                   const row = treatmentTableBody.insertRow();
+                   row.insertCell().textContent = treatment.treatmentIndex;
+                   row.insertCell().textContent = formatDate(treatment.treatmentDate);
+                   row.insertCell().textContent = treatment.productName;
+                   row.insertCell().textContent = treatment.batchNumber;
+                   row.insertCell().textContent = treatment.doseValue;
+                   row.insertCell().textContent = treatment.doseUnit;
+                   row.insertCell().textContent = treatment.whp;
+                   row.insertCell().textContent = treatment.esi;
+                   row.insertCell().textContent = treatment.treatedBy;
+                   row.insertCell().textContent = treatment.adverseReactions;
+                   row.insertCell().textContent = treatment.brokenNeedle;
+                   row.insertCell().textContent = treatment.equipCleaned;
+                   row.insertCell().textContent = treatment.equipCleanedBy ? treatment.equipCleanedBy : '';
+                   row.insertCell().textContent = treatment.comments ? treatment.comments : '';
+
+
+               });
+               // Scroll to the bottom of the table
+               treatmentTableBody.parentElement.scrollTop = treatmentTableBody.parentElement.scrollHeight;
+           }
+
+           function openAddTreatmentForm() {
+               addTreatmentForm.classList.remove('hidden');
+               treatmentForm.reset();
+               treatmentIndexInput.value = '';
+               populateProductDropdown();
+           }
+
+           function closeAddTreatmentForm() {
+               addTreatmentForm.classList.add('hidden');
+           }
+
+           function editTreatment(treatment) {
+               openAddTreatmentForm();
+               populateProductDropdown();
+               productNameSelect.value = treatment.productName;
+               updateBatchNumbers();
+               batchNumberSelect.value = treatment.batchNumber;
+
+               for (const key in treatment) {
+                   if (treatmentForm.elements[key]) {
+                       treatmentForm.elements[key].value = treatment[key];
+                   }
+               }
+           }
+
+           function deleteTreatment(index) {
+               if (confirm('Are you sure you want to delete this treatment record?')) {
+                   treatments = treatments.filter(treatment => treatment.treatmentIndex !== index);
+                   displayTreatments();
+               }
+           }
+
+           treatmentForm.addEventListener('submit', function (event) {
+               event.preventDefault();
+               const formData = new FormData(treatmentForm);
+               const data = Object.fromEntries(formData.entries());
+
+               if (!data.treatmentIndex) {
+                   data.treatmentIndex = getNextTreatmentIndex().toString();
+               }
+
+               const existingIndex = treatments.findIndex(t => t.treatmentIndex === data.treatmentIndex);
+               if (existingIndex > -1) {
+                   treatments[existingIndex] = data;
+               } else {
+                   treatments.push(data);
+               }
+
+               displayTreatments();
+               closeAddTreatmentForm();
+           });
+           productNameSelect.addEventListener('change', updateBatchNumbers);
+           batchNumberSelect.addEventListener('change', updateWHP);
+           whpInput.addEventListener('change', function () {
+               esiInput.value = whpInput.value;
+           });
+           // Initialization
+           populateProductDropdown();
+           // Pre-populate with dummy data
+           const dummyData = [
+                { treatmentIndex: '1', treatmentDate: '2024-08-01', productName: 'Amdopar', batchNumber: 'AX12', doseValue: 20, doseUnit: 'mL', whp: 35, esi: 35, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'General worming' },
+                { treatmentIndex: '2', treatmentDate: '2024-08-05', productName: 'Eprinex', batchNumber: 'EP45', doseValue: 15, doseUnit: 'mL', whp: 0, esi: 0, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'Lice treatment' },
+                { treatmentIndex: '3', treatmentDate: '2024-08-10', productName: 'Cydectin', batchNumber: 'CY78', doseValue: 10, doseUnit: 'mL', whp: 28, esi: 28, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Mite prevention' },
+                { treatmentIndex: '4', treatmentDate: '2024-08-12', productName: 'Vaccine B', batchNumber: 'VB23', doseValue: 2, doseUnit: 'mL', whp: 0, esi: 0, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'Booster shot' },
+                { treatmentIndex: '5', treatmentDate: '2024-08-15', productName: 'Dectomax', batchNumber: 'DX56', doseValue: 25, doseUnit: 'mL', whp: 42, esi: 42, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Tick control' },
+                { treatmentIndex: '6', treatmentDate: '2024-08-18', productName: 'Amdopar', batchNumber: 'AX90', doseValue: 22, doseUnit: 'mL', whp: 35, esi: 35, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'Wormer' },
+                { treatmentIndex: '7', treatmentDate: '2024-08-20', productName: 'Eprinex', batchNumber: 'EP89', doseValue: 16, doseUnit: 'mL', whp: 0, esi: 0, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Lice killer' },
+                { treatmentIndex: '8', treatmentDate: '2024-08-22', productName: 'Cydectin', batchNumber: 'CY54', doseValue: 11, doseUnit: 'mL', whp: 28, esi: 28, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'Mite treatment' },
+                { treatmentIndex: '9', treatmentDate: '2024-08-25', productName: 'Vaccine B', batchNumber: 'VB67', doseValue: 3, doseUnit: 'mL', whp: 0, esi: 0, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Annual vaccination' },
+                { treatmentIndex: '10', treatmentDate: '2024-08-27', productName: 'Dectomax', batchNumber: 'DX21', doseValue: 26, doseUnit: 'mL', whp: 42, esi: 42, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'External parasite control' },
+                { treatmentIndex: '11', treatmentDate: '2024-08-29', productName: 'Amdopar', batchNumber: 'AX32', doseValue: 21, doseUnit: 'mL', whp: 35, esi: 35, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Internal parasite treatment' },
+                { treatmentIndex: '12', treatmentDate: '2024-09-01', productName: 'Eprinex', batchNumber: 'EP43', doseValue: 17, doseUnit: 'mL', whp: 0, esi: 0, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'Lice and fly control' },
+                { treatmentIndex: '13', treatmentDate: '2024-09-03', productName: 'Cydectin', batchNumber: 'CY54', doseValue: 12, doseUnit: 'mL', whp: 28, esi: 28, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Scabies treatment' },
+                { treatmentIndex: '14', treatmentDate: '2024-09-06', productName: 'Vaccine B', batchNumber: 'VB65', doseValue: 4, doseUnit: 'mL', whp: 0, esi: 0, treatedBy: 'Sally Field', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Farmer Bob', comments: 'Multi-strain vaccine' },
+                { treatmentIndex: '15', treatmentDate: '2024-09-08', productName: 'Dectomax', batchNumber: 'DX76', doseValue: 27, doseUnit: 'mL', whp: 42, esi: 42, treatedBy: 'Farmer Bob', adverseReactions: 'No', brokenNeedle: 'No', equipCleaned: 'Yes', equipCleanedBy: 'Sally Field', comments: 'Broad-spectrum antiparasitic' }
+                ];
+
+          treatments.push(...dummyData);
+          displayTreatments();
+
+      </script>
+
+  </body>
+
+  </html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan Data</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+ 
+    }
+    
+    .tab-container {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;  /* Take up remaining space */
+      height: 100%;  /* Ensure it fills the screen */
+    }
+    /* Style for the top tabs */
+    .tabs-top {
+      display: flex;
+      justify-content: center;
+      border-top: 2px solid #ccc;
+      margin-top: 0px;
+      flex-shrink: 0;
+      height: 50px;
+    }
+    .tab {
+      flex-grow: 1;
+      padding: 15px 0;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      border-radius: 0 0 5px 5px;
+    }
+    .tab:hover {
+      background-color: #ddd;
+    }
+    .active-tab {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    /* Style for the tab content */
+    .tab-content {
+      flex-grow: 1;  /* Forces tab content to fill the remaining height */
+      display: none; /* Initially hidden */
+      overflow-y: auto; /* Scroll if needed */
+      padding: 10px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    /* Show content for active tab */
+    .active-content {
+      display: flex; /* Make the active tab visible */
+      flex-direction: column;
+    }
+    .tag-container {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      background-color: #f9f9f9;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .tag-image {
+      width: 100%;
+      height: auto;
+    }
+    .nlis-overlay {
+      position: absolute;
+      top: 25px;
+      left: 152px;
+      width: 20px;
+      height: 28px;
+    }
+    .tag-text {
+      position: absolute;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+    }
+    .PIC {
+      top: 29px;
+      left: 50px;
+      font-size: 14px;
+    }
+    .NLIScode {
+      bottom: 30px;
+      left: 50px;
+      font-size: 14px;
+    }
+    .VisualID {
+      bottom: 32px;
+      right: 55px;
+      font-size: 28px;
+      font-family: "Arial Narrow", sans-serif;
+      font-weight: bold;
+      transform: scaleX(0.75);
+    }
+    .test-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 14px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .test-button:hover {
+      background-color: #0056b3;
+    }
+    /* Style for bottom tabs */
+    .tabs-bottom {
+      display: flex;
+      justify-content: center;
+      border-top: 2px solid #ccc;
+      margin-top: -10vh;
+      flex-shrink: 0;
+      height: 50px; /* Ensure the bottom tabs take up the same space */
+    }
+    .tabs-bottom .tab {
+      flex-grow: 1;
+      padding: 15px 0;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      border-radius: 0 0 5px 5px;
+    }
+    .tabs-bottom .tab:hover {
+      background-color: #ddd;
+    }
+    .tabs-bottom .active-tab {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    #status {
+      font-size: 20px; /* Larger font size */
+      padding: 10px 15px; /* More padding for a larger box */
+      width: 150px; /* Width of the dropdown box */
+      border-radius: 8px; /* Rounded corners */
+      border: 2px solid #ccc; /* Border for definition */
+    }
+    #animal {
+      font-size: 24px;
+    }
+    #comments {
+      font-size: 24px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      min-height: 160px; /* Ensures space for multiple lines */
+    }
+    #animalStatus {
+      font-size: 24px; /* Larger text */
+      padding: 5px; /* More padding inside the box */
+      width: 200px; /* Adjust width as needed */
+      height: 42px; /* Increase height for better touch usability */
+      border-radius: 5px; /* Rounded corners */
+      border: 2px solid #ccc; /* Add border for better visibility */
+      background-color: white; /* Ensure good contrast */
+    }
+
+  </style>
+</head>
+<body>
+  <div class="tab-container">
+    <!-- Top Tab Navigation -->
+    <div class="tabs-top">
+      <div class="tab active-tab" onclick="showTab('tag')">Tag</div>
+      <div class="tab" onclick="showTab('animal')">Animal</div>
+      <div class="tab" onclick="showTab('traits')">Traits</div>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="tag" class="tab-content active-content">
+      <div class="text-top">
+        <p>RFID: <span id="rfid">Waiting...</span></p>
+        <p>Tag NLIS ID: <span id="nlisID">Waiting...</span></p>
+        <p>Tag Visual ID: <span id="visualID">Waiting...</span></p>
+        <p>Status: 
+          <select id="status" onchange="updateStatus()">
+            <option value="UNUSED" style="background-color: grey;" >UNUSED</option>
+            <option value="ACTIVE" style="background-color: green; color: white;">ACTIVE</option>
+            <option value="INACTIVE" style="background-color: red; color: white;">INACTIVE</option>
+          </select>
+        </p>
+      </div>
+
+      <!-- Tag Image Display -->
+      <div class="tag-container">
+        <img id="tagImage" src="BLACK.png" alt="Tag Image" class="tag-image">
+        <img id="nlisOverlay" src="nlis_white.png" alt="Overlay" class="tag-image nlis-overlay">
+        <div id="picText" class="tag-text PIC">NK509384</div>
+        <div id="nlisText" class="tag-text NLIScode">ASU00141</div>
+        <div id="visualIDText" class="tag-text VisualID">CHAD 141</div>
+      </div>
+
+      <!-- Test Button -->
+      <button class="test-button" onclick="simulateTagData()">Test</button>
+    </div>
+
+    <div id="animal" class="tab-content">
+      <div><strong>RFID:</strong> <span id="rfidAnimal"></span></div>
+      <div><strong>Breed:</strong> <span id="breed"></span></div>
+      <div><strong>Type:</strong> <span id="type"></span></div>
+      <div><strong>Name:</strong> <span id="name"></span></div>
+      
+      <!-- Animal Status dropdown -->
+      <div><strong>Animal Status:</strong>
+        <select id="animalStatus">
+          <option value="Alive" style="background-color: green; color: white;">Alive</option>
+          <option value="Dead" style="background-color: red; color: white;">Dead</option>
+          <option value="Sold" style="background-color: yellow; color: black;">Sold</option>
+        </select>
+      </div>
+    
+      <div><strong>Group:</strong> <span id="group"></span></div>
+      <div><strong>Location:</strong> <span id="location"></span></div>
+      <div><strong>Age:</strong> <span id="age"></span></div>
+      <div><strong>Gender:</strong> <span id="gender"></span></div>
+      <div><strong>WHP Safe Date:</strong> <span id="whpSafeDate"></span></div>
+      <div><strong>Mother:</strong> <span id="mother"></span></div>
+      <div><strong>Father:</strong> <span id="father"></span></div>
+      <div><strong>Born:</strong> <span id="born"></span></div>
+      <div style="width: 100%; margin-top: 10px;"><strong>Comments:</strong></div>
+      <textarea id="comments" rows="4" style="width: calc(100% - 10px); resize: vertical;"></textarea>
+
+    </div>
+    
+    
+
+    <div id="traits" class="tab-content">
+      <!-- Traits tab content is blank for now -->
+      <p>No traits data available.</p>
+    </div>
+
+    <div id="treatments" class="tab-content">
+      <!-- Treatments tab content is blank for now -->
+      <p>No treatments data available.</p>
+    </div>
+
+    <div id="transfers" class="tab-content">
+      <!-- Transfers tab content is blank for now -->
+      <p>No transfers data available.</p>
+    </div>
+
+    <!-- Bottom Tab Navigation -->
+    <div class="tabs-bottom">
+      <div class="tab" onclick="showTab('treatments')">Treatments</div>
+      <div class="tab" onclick="showTab('transfers')">Transfers</div>
+    </div>
+  </div>
+
+  <script>
+  const testData = [
+    {
+      rfid: "940 110035858091",
+      nlisID: "NK509384ASU00231",
+      visualID: "CHAD 001",
+      pic: "NK509384",
+      colour: "PURPLE",
+      breed: "Merino",
+      type: "Sheep",
+      name: "Dolly",
+      group: "Group 1",
+      location: "Pen A",
+      age: "2 years",
+      gender: "Female",
+      comments: "Healthy, ready for breeding",
+      whpSafeDate: "2025-06-15",
+      mother: "Mum1",
+      father: "Dad1",
+      born: "Twin",
+      tagStatus: "ACTIVE",  // Use tagStatus instead of status
+      animalStatus: "Alive"  // Use animalStatus instead of status
+    },
+    {
+      rfid: "940 110035858092",
+      nlisID: "NK509384ASU00232",
+      visualID: "CHAD 002",
+      pic: "NK509384",
+      colour: "PINK",
+      breed: "Suffolk",
+      type: "Sheep",
+      name: "Rambo",
+      group: "Group 2",
+      location: "Pen B",
+      age: "3 years",
+      gender: "Male",
+      comments: "Sold to a new farm",
+      whpSafeDate: "2025-07-10",
+      mother: "Mum2",
+      father: "Dad2",
+      born: "Single",
+      tagStatus: "INACTIVE",  // Use tagStatus instead of status
+      animalStatus: "Sold"  // Use animalStatus instead of status
+    },
+    {
+      rfid: "940 110035858093",
+      nlisID: "NK509384ASU00233",
+      visualID: "CHAD 003",
+      pic: "NK509384",
+      colour: "YELLOW",
+      breed: "Merino",
+      type: "Sheep",
+      name: "Maggie",
+      group: "Group 3",
+      location: "Pen C",
+      age: "1 year",
+      gender: "Female",
+      comments: "Healthy and growing",
+      whpSafeDate: "2025-05-12",
+      mother: "Mum3",
+      father: "Dad3",
+      born: "Twin",
+      tagStatus: "UNUSED",  // Use tagStatus instead of status
+      animalStatus: "Dead"  // Use animalStatus instead of status
+    },
+    {
+      rfid: "940 110035858094",
+      nlisID: "NK509384ASU00234",
+      visualID: "CHAD 004",
+      pic: "NK509384",
+      colour: "BLACK",
+      breed: "Suffolk",
+      type: "Sheep",
+      name: "Buster",
+      group: "Group 4",
+      location: "Pen D",
+      age: "4 years",
+      gender: "Male",
+      comments: "Good size, ready for breeding",
+      whpSafeDate: "2025-09-20",
+      mother: "Mum4",
+      father: "Dad4",
+      born: "Single",
+      tagStatus: "ACTIVE",  // Use tagStatus instead of status
+      animalStatus: "Alive"  // Use animalStatus instead of status
+    }
+  ];
+
+
+    let currentDataIndex = 0;
+
+    function updateTag(color) {
+      const tagImage = document.getElementById("tagImage");
+      const overlayImage = document.getElementById("nlisOverlay");
+      const picText = document.getElementById("picText");
+      const nlisText = document.getElementById("nlisText");
+      const visualIDText = document.getElementById("visualIDText");
+
+      tagImage.src = `/images/${color}.png`;
+      const textColor = (["BLACK", "PURPLE"].includes(color)) ? "white" : "black";
+      picText.style.color = textColor;
+      nlisText.style.color = textColor;
+      visualIDText.style.color = textColor;
+      overlayImage.src = (textColor === "white") ? "/images/nlis_white.png" : "/images/nlis_black.png";
+    }
+
+    function updateStatus() {
+      const statusSelect = document.getElementById("status");
+      const selectedStatus = statusSelect.value;
+
+      // Update background color based on the selected status
+      if (selectedStatus === "ACTIVE") {
+        statusSelect.style.backgroundColor = "green";
+        statusSelect.style.color = "white";
+      } else if (selectedStatus === "INACTIVE") {
+        statusSelect.style.backgroundColor = "red";
+        statusSelect.style.color = "white";
+      } else {
+        statusSelect.style.backgroundColor = "grey";
+        statusSelect.style.color = "black";
+      }
+    }
+
+    function updateAnimalStatus() {
+      const animalStatusSelect = document.getElementById("animalStatus");
+      if (!animalStatusSelect) return; // Prevent errors if element is missing
+
+      const selectedStatus = animalStatusSelect.value;
+
+      // Reset styles first
+      animalStatusSelect.style.backgroundColor = "";
+      animalStatusSelect.style.color = "";
+
+      // Update styles based on selected status
+      switch (selectedStatus) {
+        case "Alive":
+          animalStatusSelect.style.backgroundColor = "green";
+          animalStatusSelect.style.color = "white";
+          break;
+        case "Sold":
+          animalStatusSelect.style.backgroundColor = "blue";
+          animalStatusSelect.style.color = "white";
+          break;
+        case "Dead":
+          animalStatusSelect.style.backgroundColor = "red";
+          animalStatusSelect.style.color = "white";
+          break;
+        default:
+          animalStatusSelect.style.backgroundColor = "grey";
+          animalStatusSelect.style.color = "black";
+      }
+    }
+
+
+    function simulateTagData() {
+      const data = testData[currentDataIndex];
+      document.getElementById("rfid").innerHTML = data.rfid;
+      document.getElementById("visualID").innerHTML = data.visualID;
+      document.getElementById("picText").innerHTML = data.pic;
+      document.getElementById("nlisID").innerHTML = data.nlisID;
+      document.getElementById("nlisText").innerHTML = data.nlisID.slice(8);
+      document.getElementById("visualIDText").innerHTML = data.visualID;
+      document.getElementById("status").value = data.tagStatus;
+      updateTag(data.colour);
+      updateStatus();
+      simulateAnimalData(data); // Pass the current data to simulateAnimalData
+      currentDataIndex = (currentDataIndex + 1) % testData.length; // Increment only once
+    }
+
+    function simulateAnimalData(data) { // Receive the data as an argument
+      document.getElementById("rfidAnimal").innerHTML = data.rfid;
+      document.getElementById("breed").innerHTML = data.breed;
+      document.getElementById("type").innerHTML = data.type;
+      document.getElementById("name").innerHTML = data.name;
+
+      const animalStatusDropdown = document.getElementById("animalStatus");
+      if (animalStatusDropdown) {
+        animalStatusDropdown.value = data.animalStatus || "Alive";
+        updateAnimalStatus();
+      }
+      document.getElementById("group").innerHTML = data.group;
+      document.getElementById("location").innerHTML = data.location;
+      document.getElementById("age").innerHTML = data.age;
+      document.getElementById("gender").innerHTML = data.gender;
+      document.getElementById("comments").innerHTML = data.comments;
+      document.getElementById("whpSafeDate").innerHTML = data.whpSafeDate;
+      document.getElementById("mother").innerHTML = data.mother;
+      document.getElementById("father").innerHTML = data.father;
+      document.getElementById("born").innerHTML = data.born;
+
+      // No need to increment currentDataIndex here anymore
+    }
+
+    function showTab(tabName) {
+      // Hide all tab content
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active-content');
+      });
+
+      // Remove active class from all tabs
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.classList.remove('active-tab');
+      });
+
+      // Show the clicked tab content and add active class to the clicked tab
+      document.getElementById(tabName).classList.add('active-content');
+      const activeTab = document.querySelector(`.tab[onclick="showTab('${tabName}')"]`);
+      activeTab.classList.add('active-tab');
+    }
+
+    // Set initial tag state on page load
+    window.onload = function() {
+      updateTag("BLACK");  // This will ensure the correct color is applied on page load
+    };
+
+    // Auto-refresh data every 5 seconds
+    setInterval(simulateTagData, 5000);
+  </script>
+</body>
+</html>

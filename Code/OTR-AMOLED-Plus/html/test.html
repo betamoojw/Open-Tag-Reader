@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>ESP32 Web Server</title>
+  <style>
+    body {
+      text-align: center;
+      font-size: 48px;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>OPEN TAG READER</h1>
+  <p id="battery-voltage">Battery Voltage: <span id="battery-voltage-value">0</span> mV</p>
+  <form action="/toggle" method="get">
+    <button style="background-color: green; color: white; padding: 40px 80px; border: none; border-radius: 10px; cursor: pointer; font-size: 36px;" type="submit">ON</button>
+  </form>
+  <script>
+    function updateBatteryVoltage() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/battery-voltage', true);
+      xhr.onload = function() {
+        document.getElementById('battery-voltage-value').innerHTML = xhr.responseText;
+      };
+      xhr.send();
+    }
+
+    setInterval(updateBatteryVoltage, 1000);
+  </script>
+</body>
+</html>
