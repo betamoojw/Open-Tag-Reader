@@ -551,13 +551,21 @@ void ANIMALS::remove(AnimalsFile animalToRemove) {
     }
 }
 
-ANIMALS::AnimalsFile& ANIMALS::find(String& rfid) {
+bool ANIMALS::find(String& rfid, AnimalsFile& result) {
     for (int i = 0; i < numAnimals; i++) {
         if (animal[i].rfid == rfid) {
-            return animal[i];
+            #ifdef OTR_DEBUG
+                Serial.print("Animal found: Record #"); Serial.println(i);
+            #endif
+            result = animal[i];
+            return true;
         }
     }
-    throw std::runtime_error("Animal not found");
+    #ifdef OTR_DEBUG
+        Serial.println("Animal not found");
+    #endif
+
+    return false;
 }
 //UNFINISHED
 void ANIMALS::create() {

@@ -51,7 +51,9 @@ void createLvglTimers(void) {
 
 void setupHomeButton(void) {
     amoled.setHomeButtonCallback([](void *ptr) {
-        Serial.println("Home key pressed!");
+        #ifdef OTR_DEBUG
+            Serial.println("Home key pressed!");
+        #endif
         static uint32_t checkMs = 0;
         
 

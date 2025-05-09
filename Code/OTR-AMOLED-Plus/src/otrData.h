@@ -118,7 +118,7 @@ class ANIMALS {
         void remove(AnimalsFile);
         void create();
         void renewFile();
-        AnimalsFile& find(String& rfid);
+        bool find(String& rfid, AnimalsFile& result);
         int countAllAlive();
         int countByGroup();
         

@@ -28,10 +28,10 @@ uint8_t btnPin = 0;
 uint8_t rotation = 1;
 extern RFIDReader rfidreader;
 
-//CONFIG
+//CONFIG #################################
 bool readerBoard =0;  // 0 for Priority 1 (ASCII Output), 1 for WL134A
 bool readerSerial = 0; // 0 for Serial0, 1 for Serial1 
-//
+// #######################################
 
 
 void setup()
