@@ -8,6 +8,9 @@
 
 
 extern LilyGo_Class amoled;
+extern LED led;
+extern VIBRATE vibrate;
+extern BUZZER buzzer;
 
 static uint8_t lastBri =0;
 
@@ -37,7 +40,11 @@ void one_minute_timer_cb(lv_timer_t * timer3) {
 }
 
 void led_timer_cb(lv_timer_t * timer4) {
-    //
+    // control led, buzzer and vibration
+    led.pulsing();
+    vibrate.monitor();
+    buzzer.monitor();
+
 }
 
 void createLvglTimers(void) {
@@ -60,6 +67,10 @@ void setupHomeButton(void) {
         if (millis() > checkMs) {
             _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
             toggleBlankScreen();
+            vibrate.longBuzz();
+            buzzer.shortBeep();
+            
+            
         }
         checkMs = millis() + 200;
         
@@ -264,9 +275,23 @@ void successfulScan(void)   {
     lv_label_set_text(ui_Main_Counter, String(counter).c_str());
     lv_obj_clear_flag(ui_Main_Counter, LV_OBJ_FLAG_HIDDEN);
     lv_refr_now(lv_disp_get_default());
+    buzzer.successTone();
+    vibrate.success();
     lv_timer_create([](lv_timer_t *t) {
         lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);;
         lv_timer_del(t);
     }, 5000, NULL);
 
+}
+
+void duplicateScan(void)    {
+    lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFA07A), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_clear_flag(ui_Main_Counter, LV_OBJ_FLAG_HIDDEN);
+    lv_refr_now(lv_disp_get_default());
+    buzzer.errorTone();
+    vibrate.error();
+    lv_timer_create([](lv_timer_t *t) {
+        lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);;
+        lv_timer_del(t);
+    }, 200, NULL);
 }

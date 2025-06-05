@@ -8,7 +8,7 @@
 #include <LV_Helper.h>
 #include <lvgl.h>
 #include "ui/ui.h"
-//#include "otrFeedback.h"
+#include "otrFeedback.h"
 #include "otrData.h"
 //#include "otrDisplay.h"
 // pins
@@ -61,8 +61,8 @@ class RFIDReader {
     public:
         struct RFIDConfig{
             const uint8_t RFIDPowerPin = 42;
-            const uint8_t TXD1 = 11;
-            const uint8_t RXD1 = 10;
+            const int8_t TXD1 = -1;
+            const int8_t RXD1 = 41;
             const uint16_t baud = 9600;
             const uint16_t timeout = 50;
             const uint8_t messageLength = 30;

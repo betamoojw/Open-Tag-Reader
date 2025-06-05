@@ -46,3 +46,7 @@ def roller_update(event_struct):
 def mainScreenLoaded(event_struct):
     return
 
+
+def tetherClicked(event_struct):
+    return
+

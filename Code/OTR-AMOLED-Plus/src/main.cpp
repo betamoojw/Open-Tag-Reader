@@ -22,15 +22,19 @@
 #include "otrWebInterface.h"
 #include "otrData.h"
 #include "otrScanning.h"
+#include "otrFeedback.h"
 
 LilyGo_Class amoled;
 uint8_t btnPin = 0;
 uint8_t rotation = 1;
 extern RFIDReader rfidreader;
+LED led;
+VIBRATE vibrate;
+BUZZER buzzer;
 
 //CONFIG #################################
 bool readerBoard =0;  // 0 for Priority 1 (ASCII Output), 1 for WL134A
-bool readerSerial = 0; // 0 for Serial0, 1 for Serial1 
+bool readerSerial = 1; // 0 for Serial0, 1 for Serial1 
 // #######################################
 
 
@@ -93,6 +97,19 @@ void setup()
     //RFID Reader
     rfidreader.begin();
 
+    //LED
+    led.init();
+
+    //Vibrate
+    vibrate.begin();
+
+    //Buzzer
+    buzzer.init();
+
+    //TESTING
+    buzzer.successTone();
+    //playClickGoesTheShears(16);
+    
 
     //Network
     createAccessPoint();
@@ -105,8 +122,9 @@ void loop()
 
     lv_task_handler();
     delay(5);
-    if(rfidreader.scan() != "") {
-        Serial.println(rfidreader.scan());
+    if(rfidreader.scan() != "") {   // reads incoming serial and checks if it is a valid tag
+                                    // if valid scan
+        //Serial.println(rfidreader.scan());
         successfulScan();
         timeStampSystem();
 

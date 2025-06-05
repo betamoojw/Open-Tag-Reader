@@ -12,6 +12,7 @@
 #include "otrPowerManagement.h"
 #include "otrTime.h"
 #include "otrNetwork.h"
+#include "otrFeedback.h"
 
 
 void setupHomeButton(void);
@@ -31,6 +32,7 @@ void updateTopPanel(void);
 void updateIPAddress(String ipAddressStr);
 void updateWiFiImage(void);
 void successfulScan(void);
+void duplicateScan(void);
 
 
 #endif

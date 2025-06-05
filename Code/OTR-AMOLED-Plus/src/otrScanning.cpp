@@ -74,6 +74,7 @@ bool RFIDReader::validateRFID(const char* RFID) {
     // RFID is 16 characters long
     // 1st 3 digits are tag companyeg 982 = Allflex, 940 = Shearwell
     // 4th character is a space
+    scanError = "";
 
     if (strlen(RFID) != 17) { 
         if (strlen(RFID)>17) {
@@ -113,6 +114,7 @@ bool RFIDReader::validateRFID(const char* RFID) {
             Serial.println("RFIDReader:validateRFID - RFID is a duplicate");
             Serial.println(scanError);
         #endif
+        
         return false;
     }
     for (int i = scanIndex - 1; i > 0; i--) {
@@ -292,6 +294,12 @@ String RFIDReader::scan() {
             #endif
             return scanResult;
         } else {
+            if (scanError == "Duplicate")   {
+                #ifdef OTR_DEBUG
+                    Serial.println("RFIDREADER:scan - Duplicate scan!");
+                #endif
+                duplicateScan();
+            }
             return "";
         }
     }
