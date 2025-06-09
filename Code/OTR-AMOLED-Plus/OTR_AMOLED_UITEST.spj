@@ -333,7 +333,7 @@
                   {
                     "nid": -1216014333,
                     "strtype": "IMAGE/Asset",
-                    "strval": "assets/wifi_tethering_off.png",
+                    "strval": "assets/wifi_tethering.png",
                     "InheritedType": 5
                   },
                   {
@@ -1408,7 +1408,7 @@
               {
                 "nid": 1030,
                 "strtype": "LABEL/Text",
-                "strval": "Test",
+                "strval": "900 123456789012",
                 "InheritedType": 10
               },
               {
@@ -1428,7 +1428,7 @@
                       {
                         "nid": 10450,
                         "strtype": "_style/Text_Font",
-                        "strval": "montserrat_30",
+                        "strval": "montserrat_24",
                         "InheritedType": 3
                       }
                     ],
@@ -1452,7 +1452,7 @@
               {
                 "nid": 10,
                 "strtype": "OBJECT/Name",
-                "strval": "Main LabelBotton",
+                "strval": "Main LabelBottom",
                 "InheritedType": 10
               },
               {
@@ -7695,7 +7695,7 @@
               {
                 "nid": 1030,
                 "strtype": "LABEL/Text",
-                "strval": "Add new animal",
+                "strval": "Activate Tag",
                 "InheritedType": 10
               },
               {
@@ -7715,7 +7715,7 @@
                       {
                         "nid": 10450,
                         "strtype": "_style/Text_Font",
-                        "strval": "montserrat_26",
+                        "strval": "montserrat_36",
                         "InheritedType": 3
                       }
                     ],
@@ -8941,7 +8941,7 @@
           {
             "nid": 10,
             "strtype": "OBJECT/Name",
-            "strval": "AddAnimal",
+            "strval": "Tagging",
             "InheritedType": 10
           },
           {
@@ -9087,7 +9087,7 @@
     "uiExportFolderPath": "C:\\Users\\Chris Chad\\Documents\\PlatformIO\\Projects\\Open-Tag-Reader\\Code\\OTR-AMOLED-Plus\\src\\ui",
     "projectExportFolderPath": "C:\\Users\\Chris Chad\\Documents\\PlatformIO\\Projects\\Open-Tag-Reader\\Code\\OTR-AMOLED-Plus\\src",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 5208,
+    "backup_cnt": 5210,
     "autosave_cnt": 0,
     "group_color_cnt": 2,
     "lvgl_version": "8.3.11",

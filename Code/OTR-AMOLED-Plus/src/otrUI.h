@@ -16,6 +16,9 @@
 
 
 void setupHomeButton(void);
+void createHomeButtonTimer(void);
+void homeButtonLongPress(void);
+void homeButtonShortPress(void);
 void createLvglTimers(void);
 void oneSecondTimer(void);
 void setTimeOnTopPanel(void);
@@ -31,7 +34,7 @@ void updateBatteryImage(void);
 void updateTopPanel(void);
 void updateIPAddress(String ipAddressStr);
 void updateWiFiImage(void);
-void successfulScan(void);
+void successfulScan(String scanResult);
 void duplicateScan(void);
 
 

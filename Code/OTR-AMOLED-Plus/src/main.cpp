@@ -107,7 +107,7 @@ void setup()
     buzzer.init();
 
     //TESTING
-    buzzer.successTone();
+    // buzzer.successTone();
     //playClickGoesTheShears(16);
     
 
@@ -125,7 +125,6 @@ void loop()
     if(rfidreader.scan() != "") {   // reads incoming serial and checks if it is a valid tag
                                     // if valid scan
         //Serial.println(rfidreader.scan());
-        successfulScan();
         timeStampSystem();
 
     }

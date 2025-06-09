@@ -22,6 +22,7 @@ void ui_event_Main(lv_event_t * e);
 extern lv_obj_t * ui_Main;
 extern lv_obj_t * ui_Main_TopPanel;
 extern lv_obj_t * ui_Main_TopPanelBattery;
+void ui_event_Main_TopPanelScan(lv_event_t * e);
 extern lv_obj_t * ui_Main_TopPanelScan;
 extern lv_obj_t * ui_Main_TopPanelButtonSettings;
 void ui_event_Main_TopPanelButtonTime(lv_event_t * e);
@@ -29,7 +30,7 @@ extern lv_obj_t * ui_Main_TopPanelButtonTime;
 extern lv_obj_t * ui_Main_TopPanelTime;
 extern lv_obj_t * ui_Main_Label_Title;
 extern lv_obj_t * ui_Main_Label_Testing;
-extern lv_obj_t * ui_Main_LabelBotton;
+extern lv_obj_t * ui_Main_LabelBottom;
 extern lv_obj_t * ui_Main_Panel1;
 extern lv_obj_t * ui_Main_Counter;
 // CUSTOM VARIABLES
@@ -72,13 +73,38 @@ void ui_event_Date_RollerMonth(lv_event_t * e);
 extern lv_obj_t * ui_Date_RollerMonth;
 // CUSTOM VARIABLES
 
+// SCREEN: ui_Session
+void ui_Session_screen_init(void);
+extern lv_obj_t * ui_Session;
+extern lv_obj_t * ui_Session_NewButton;
+extern lv_obj_t * ui_SessionNewButton_Label;
+extern lv_obj_t * ui_Session_ContinueButton;
+extern lv_obj_t * ui_SessionContinueButton_Label;
+extern lv_obj_t * ui_Session_Roller1;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_Tagging
+void ui_Tagging_screen_init(void);
+extern lv_obj_t * ui_Tagging;
+extern lv_obj_t * ui_AddAnimal_Accept;
+extern lv_obj_t * ui_AddAnimal_Label1;
+extern lv_obj_t * ui_AddAnimal_Label2;
+extern lv_obj_t * ui_AddAnimal_Location;
+extern lv_obj_t * ui_AddAnimal_Group;
+extern lv_obj_t * ui_AddAnimal_Switch1;
+extern lv_obj_t * ui_AddAnimal_Label3;
+extern lv_obj_t * ui_AddAnimal_RFID;
+extern lv_obj_t * ui_AddAnimal_Label5;
+extern lv_obj_t * ui_AddAnimal_Treatment;
+// CUSTOM VARIABLES
+
 // EVENTS
 
 extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_battery_1_bar_png);    // assets/battery_1_bar.png
-LV_IMG_DECLARE(ui_img_wifi_tethering_off_png);    // assets/wifi_tethering_off.png
+LV_IMG_DECLARE(ui_img_wifi_tethering_png);    // assets/wifi_tethering.png
 LV_IMG_DECLARE(ui_img_settings_png);    // assets/settings.png
 LV_IMG_DECLARE(ui_img_add_circle_png);    // assets/add_circle.png
 LV_IMG_DECLARE(ui_img_arrow_back_png);    // assets/arrow_back.png
@@ -95,14 +121,14 @@ LV_IMG_DECLARE(ui_img_cancel_png);    // assets/cancel.png
 LV_IMG_DECLARE(ui_img_contactless_png);    // assets/contactless.png
 LV_IMG_DECLARE(ui_img_contactless_off_png);    // assets/contactless_off.png
 LV_IMG_DECLARE(ui_img_sd_card_png);    // assets/sd_card.png
+LV_IMG_DECLARE(
+    ui_img_turn_left_200dp_1f1f1f_fill0_wght700_grad0_opsz48_png);    // assets/turn_left_200dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.png
 LV_IMG_DECLARE(ui_img_volume_down_png);    // assets/volume_down.png
 LV_IMG_DECLARE(ui_img_volume_off_png);    // assets/volume_off.png
 LV_IMG_DECLARE(ui_img_volume_up_png);    // assets/volume_up.png
 LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
 LV_IMG_DECLARE(ui_img_wifi_off_png);    // assets/wifi_off.png
-LV_IMG_DECLARE(ui_img_wifi_tethering_png);    // assets/wifi_tethering.png
-LV_IMG_DECLARE(
-    ui_img_turn_left_200dp_1f1f1f_fill0_wght700_grad0_opsz48_png);    // assets/turn_left_200dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.png
+LV_IMG_DECLARE(ui_img_wifi_tethering_off_png);    // assets/wifi_tethering_off.png
 
 // FONTS
 LV_FONT_DECLARE(ui_font_BIG);

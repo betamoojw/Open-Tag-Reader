@@ -54,31 +54,98 @@ void createLvglTimers(void) {
     lv_timer_t * timer4 = lv_timer_create(led_timer_cb,50,NULL);
 }
 
-
-
+// Home Button
+lv_timer_t *homeButtonTimer = NULL;
+uint32_t pressedTime = 0;
+bool homePressStatus = false;
 void setupHomeButton(void) {
+    static uint32_t pressCount = 0;
+    static uint32_t lastPressTime = 0;
     amoled.setHomeButtonCallback([](void *ptr) {
-        #ifdef OTR_DEBUG
-            Serial.println("Home key pressed!");
-        #endif
-        static uint32_t checkMs = 0;
-        
-
-        if (millis() > checkMs) {
-            _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
-            toggleBlankScreen();
-            vibrate.longBuzz();
-            buzzer.shortBeep();
-            
-            
+        //static uint32_t checkMs = 0;
+        uint32_t currentTime = millis();
+        uint32_t timeElapsed =0;
+        homePressStatus = true;
+        if (lastPressTime == 0) { //first call
+            lastPressTime = currentTime;
+            timeElapsed = 0;
+            //create timer
+            #ifdef OTR_DEBUG
+                Serial.println("amoled.setHomeButtonCallBack - Create timer");
+            #endif
+            createHomeButtonTimer(); 
+        } else {
+            timeElapsed = currentTime - lastPressTime;
+            lastPressTime = currentTime;
+            homePressStatus = true;
+  
+            if (timeElapsed > 50) {
+                timeElapsed = 0;
+                pressCount = 0;
+                pressedTime = 0;
+                createHomeButtonTimer();
+                #ifdef OTR_DEBUG
+                    Serial.println("amoled.setHomeButtonCallBack - Button pressed!");
+                #endif
+            } else {
+                lv_timer_reset(homeButtonTimer); //reset timer
+                // #ifdef OTR_DEBUG
+                //     Serial.println("amoled.setHomeButtonCallBack - Button held!");
+                // #endif
+            }
         }
-        checkMs = millis() + 200;
-        
+        pressedTime += timeElapsed;
+        pressCount++;
+        // #ifdef OTR_DEBUG
+        //     Serial.print("amoled.setHomeButtonCallback   "); Serial.print("pressCount: "); Serial.print(pressCount);
+        //     Serial.print("   timeElapsed: "); Serial.print(timeElapsed);
+        //     Serial.print("   pressedTime: "); Serial.println(pressedTime);
+        // #endif
 
-        lv_timer_create([](lv_timer_t *t) {
-            lv_timer_del(t);
-        }, 2000, NULL);
+        // lv_timer_create([](lv_timer_t *t) {
+        //     lv_timer_del(t);
+        // }, 2000, NULL);
     }, NULL);    
+}
+
+void createHomeButtonTimer(void) {
+    static uint16_t shortPressTime = 200;
+    static uint16_t longPressTime = 1000;
+    homeButtonTimer = lv_timer_create([](lv_timer_t *t) {
+        // Button released
+        if (pressedTime > shortPressTime && pressedTime <= longPressTime) {
+            homeButtonShortPress();
+
+        } else if (pressedTime > longPressTime) {
+            homeButtonLongPress();
+        }
+        #ifdef OTR_DEBUG
+            Serial.println("amoled.setHomeButtonCallBack - Button released!");
+        #endif
+        homePressStatus = false;
+        //lv_timer_del(t);
+    }, 50, NULL);
+    lv_timer_set_repeat_count(homeButtonTimer, 1);
+}
+void homeButtonShortPress(void) {
+    _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
+    //toggleBlankScreen();
+    //vibrate.longBuzz();
+    //buzzer.shortBeep();
+    #ifdef OTR_DEBUG
+        Serial.println("Home Key - Short press!");
+    #endif
+}
+
+void homeButtonLongPress(void) {
+    _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
+    toggleBlankScreen();
+    vibrate.longBuzz();
+    // buzzer.shortBeep();
+        
+    #ifdef OTR_DEBUG
+        Serial.println("Home Key - Long press!");
+    #endif
 }
 
 void setTimeOnTopPanel(void) {
@@ -255,7 +322,7 @@ void updateTopPanel(void)   {
 
 void updateIPAddress(String ipAddressStr)   {
     String ipStr = "IP Address: \n" + ipAddressStr;
-    lv_label_set_text(ui_Main_LabelBotton, ipStr.c_str());
+    lv_label_set_text(ui_Main_LabelBottom, ipStr.c_str());
     lv_refr_now(lv_disp_get_default());
 }
 
@@ -269,29 +336,34 @@ void updateWiFiImage(void)   {
     }
 }
 
-void successfulScan(void)   {
+void successfulScan(String scanResult)   {
     lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0x32CD32), LV_PART_MAIN | LV_STATE_DEFAULT);
     counter++;
     lv_label_set_text(ui_Main_Counter, String(counter).c_str());
     lv_obj_clear_flag(ui_Main_Counter, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui_Main_Label_Testing, scanResult.c_str());
+    lv_label_set_text(ui_Main_LabelBottom, "Scan OK");
     lv_refr_now(lv_disp_get_default());
     buzzer.successTone();
     vibrate.success();
     lv_timer_create([](lv_timer_t *t) {
-        lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);;
+        lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_label_set_text(ui_Main_LabelBottom, " ");
         lv_timer_del(t);
-    }, 5000, NULL);
+    }, 2000, NULL);
 
 }
 
 void duplicateScan(void)    {
     lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFA07A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_clear_flag(ui_Main_Counter, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(ui_Main_LabelBottom, "Duplicate Scan");
     lv_refr_now(lv_disp_get_default());
     buzzer.errorTone();
     vibrate.error();
     lv_timer_create([](lv_timer_t *t) {
         lv_obj_set_style_bg_color(ui_Main_Panel1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);;
+        lv_label_set_text(ui_Main_LabelBottom, " ");
         lv_timer_del(t);
-    }, 200, NULL);
+    }, 500, NULL);
 }

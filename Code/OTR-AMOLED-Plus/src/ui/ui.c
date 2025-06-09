@@ -14,6 +14,7 @@ void ui_event_Main(lv_event_t * e);
 lv_obj_t * ui_Main;
 lv_obj_t * ui_Main_TopPanel;
 lv_obj_t * ui_Main_TopPanelBattery;
+void ui_event_Main_TopPanelScan(lv_event_t * e);
 lv_obj_t * ui_Main_TopPanelScan;
 lv_obj_t * ui_Main_TopPanelButtonSettings;
 void ui_event_Main_TopPanelButtonTime(lv_event_t * e);
@@ -21,7 +22,7 @@ lv_obj_t * ui_Main_TopPanelButtonTime;
 lv_obj_t * ui_Main_TopPanelTime;
 lv_obj_t * ui_Main_Label_Title;
 lv_obj_t * ui_Main_Label_Testing;
-lv_obj_t * ui_Main_LabelBotton;
+lv_obj_t * ui_Main_LabelBottom;
 lv_obj_t * ui_Main_Panel1;
 lv_obj_t * ui_Main_Counter;
 // CUSTOM VARIABLES
@@ -64,6 +65,31 @@ void ui_event_Date_RollerMonth(lv_event_t * e);
 lv_obj_t * ui_Date_RollerMonth;
 // CUSTOM VARIABLES
 
+// SCREEN: ui_Session
+void ui_Session_screen_init(void);
+lv_obj_t * ui_Session;
+lv_obj_t * ui_Session_NewButton;
+lv_obj_t * ui_SessionNewButton_Label;
+lv_obj_t * ui_Session_ContinueButton;
+lv_obj_t * ui_SessionContinueButton_Label;
+lv_obj_t * ui_Session_Roller1;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_Tagging
+void ui_Tagging_screen_init(void);
+lv_obj_t * ui_Tagging;
+lv_obj_t * ui_AddAnimal_Accept;
+lv_obj_t * ui_AddAnimal_Label1;
+lv_obj_t * ui_AddAnimal_Label2;
+lv_obj_t * ui_AddAnimal_Location;
+lv_obj_t * ui_AddAnimal_Group;
+lv_obj_t * ui_AddAnimal_Switch1;
+lv_obj_t * ui_AddAnimal_Label3;
+lv_obj_t * ui_AddAnimal_RFID;
+lv_obj_t * ui_AddAnimal_Label5;
+lv_obj_t * ui_AddAnimal_Treatment;
+// CUSTOM VARIABLES
+
 // EVENTS
 lv_obj_t * ui____initial_actions0;
 
@@ -86,6 +112,15 @@ void ui_event_Main(lv_event_t * e)
 
     if(event_code == LV_EVENT_SCREEN_LOADED) {
         mainScreenLoaded(e);
+    }
+}
+
+void ui_event_Main_TopPanelScan(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        tetherClicked(e);
     }
 }
 
@@ -191,6 +226,8 @@ void ui_init(void)
     ui_Main_screen_init();
     ui_Time_screen_init();
     ui_SetTime_screen_init();
+    ui_Session_screen_init();
+    ui_Tagging_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Main);
 }

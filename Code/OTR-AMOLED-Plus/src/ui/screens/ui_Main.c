@@ -29,7 +29,7 @@ void ui_Main_screen_init(void)
     lv_obj_clear_flag(ui_Main_TopPanelBattery, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_Main_TopPanelScan = lv_img_create(ui_Main_TopPanel);
-    lv_img_set_src(ui_Main_TopPanelScan, &ui_img_wifi_tethering_off_png);
+    lv_img_set_src(ui_Main_TopPanelScan, &ui_img_wifi_tethering_png);
     lv_obj_set_width(ui_Main_TopPanelScan, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Main_TopPanelScan, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_Main_TopPanelScan, lv_pct(-45));
@@ -86,18 +86,18 @@ void ui_Main_screen_init(void)
     lv_obj_set_width(ui_Main_Label_Testing, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Main_Label_Testing, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_Main_Label_Testing, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Main_Label_Testing, "Test");
-    lv_obj_set_style_text_font(ui_Main_Label_Testing, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_label_set_text(ui_Main_Label_Testing, "900 123456789012");
+    lv_obj_set_style_text_font(ui_Main_Label_Testing, &lv_font_montserrat_24, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Main_LabelBotton = lv_label_create(ui_Main);
-    lv_obj_set_width(ui_Main_LabelBotton, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Main_LabelBotton, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Main_LabelBotton, 0);
-    lv_obj_set_y(ui_Main_LabelBotton, -10);
-    lv_obj_set_align(ui_Main_LabelBotton, LV_ALIGN_BOTTOM_MID);
-    lv_label_set_text(ui_Main_LabelBotton, "IP Address:\n1.1.1..1");
-    lv_obj_set_style_text_align(ui_Main_LabelBotton, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Main_LabelBotton, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_Main_LabelBottom = lv_label_create(ui_Main);
+    lv_obj_set_width(ui_Main_LabelBottom, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Main_LabelBottom, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Main_LabelBottom, 0);
+    lv_obj_set_y(ui_Main_LabelBottom, -10);
+    lv_obj_set_align(ui_Main_LabelBottom, LV_ALIGN_BOTTOM_MID);
+    lv_label_set_text(ui_Main_LabelBottom, "IP Address:\n1.1.1..1");
+    lv_obj_set_style_text_align(ui_Main_LabelBottom, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Main_LabelBottom, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Main_Panel1 = lv_obj_create(ui_Main);
     lv_obj_set_width(ui_Main_Panel1, 234);
@@ -113,11 +113,12 @@ void ui_Main_screen_init(void)
     lv_obj_set_width(ui_Main_Counter, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Main_Counter, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_Main_Counter, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Main_Counter, "248");
+    lv_label_set_text(ui_Main_Counter, "0");
     lv_obj_add_flag(ui_Main_Counter, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_text_align(ui_Main_Counter, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Main_Counter, &ui_font_BIG, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    lv_obj_add_event_cb(ui_Main_TopPanelScan, ui_event_Main_TopPanelScan, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main_TopPanelButtonTime, ui_event_Main_TopPanelButtonTime, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main, ui_event_Main, LV_EVENT_ALL, NULL);
 

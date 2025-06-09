@@ -292,6 +292,7 @@ String RFIDReader::scan() {
                 Serial.print("RFIDREADER:scan - Valid RFID! ");
                 Serial.println(scanResult);
             #endif
+            successfulScan(scanResult);
             return scanResult;
         } else {
             if (scanError == "Duplicate")   {

@@ -36,3 +36,8 @@ void mainScreenLoaded(lv_event_t * e)
 	// Your code here
 	updateTopPanel();
 }
+
+void tetherClicked(lv_event_t * e)
+{
+	// Your code here
+}

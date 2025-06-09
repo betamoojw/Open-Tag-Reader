@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 void mainScreenLoaded(lv_event_t * e);
+void tetherClicked(lv_event_t * e);
 void timeScreenLoaded(lv_event_t * e);
 void SetTimeScreenLoaded(lv_event_t * e);
 void setTimeManual(lv_event_t * e);
