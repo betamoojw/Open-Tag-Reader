@@ -29,6 +29,7 @@ lv_obj_t * ui_Main_Counter;
 lv_obj_t * ui_Main_Label_Session;
 lv_obj_t * ui_Main_Label_Location;
 lv_obj_t * ui_Main_Label_VisualID;
+lv_obj_t * ui_Main_TabView1;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Time
@@ -98,6 +99,11 @@ lv_obj_t * ui_AddAnimal_Treatment;
 void ui_Settings_screen_init(void);
 lv_obj_t * ui_Settings;
 lv_obj_t * ui_Settings_Label_Top;
+lv_obj_t * ui_Settings_TabView;
+lv_obj_t * ui_Settings_TabPageFiles;
+lv_obj_t * ui_Settings_TextAreaFiles;
+lv_obj_t * ui_Settings_TabPageStorage;
+lv_obj_t * ui_Settings_TextArea2;
 // CUSTOM VARIABLES
 
 // EVENTS

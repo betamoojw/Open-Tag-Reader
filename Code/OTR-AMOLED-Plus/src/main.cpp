@@ -110,6 +110,7 @@ void setup()
     //TESTING
     // buzzer.successTone();
     //playClickGoesTheShears(16);
+    listDir("/");
     
 
     //Network

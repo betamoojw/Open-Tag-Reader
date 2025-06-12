@@ -19,4 +19,28 @@ void ui_Settings_screen_init(void)
     lv_label_set_text(ui_Settings_Label_Top, "Settings");
     lv_obj_set_style_text_font(ui_Settings_Label_Top, &lv_font_montserrat_36, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Settings_TabView = lv_tabview_create(ui_Settings, LV_DIR_TOP, 50);
+    lv_obj_set_width(ui_Settings_TabView, lv_pct(100));
+    lv_obj_set_height(ui_Settings_TabView, lv_pct(90));
+    lv_obj_set_x(ui_Settings_TabView, 0);
+    lv_obj_set_y(ui_Settings_TabView, lv_pct(6));
+    lv_obj_set_align(ui_Settings_TabView, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_Settings_TabView, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_Settings_TabPageFiles = lv_tabview_add_tab(ui_Settings_TabView, "Files");
+
+    ui_Settings_TextAreaFiles = lv_textarea_create(ui_Settings_TabPageFiles);
+    lv_obj_set_width(ui_Settings_TextAreaFiles, lv_pct(100));
+    lv_obj_set_height(ui_Settings_TextAreaFiles, lv_pct(100));
+    lv_obj_set_align(ui_Settings_TextAreaFiles, LV_ALIGN_CENTER);
+    lv_textarea_set_placeholder_text(ui_Settings_TextAreaFiles, "Files...");
+
+    ui_Settings_TabPageStorage = lv_tabview_add_tab(ui_Settings_TabView, "Storage");
+
+    ui_Settings_TextArea2 = lv_textarea_create(ui_Settings_TabPageStorage);
+    lv_obj_set_width(ui_Settings_TextArea2, lv_pct(100));
+    lv_obj_set_height(ui_Settings_TextArea2, lv_pct(100));
+    lv_obj_set_align(ui_Settings_TextArea2, LV_ALIGN_CENTER);
+    lv_textarea_set_placeholder_text(ui_Settings_TextArea2, "Storage...");
+
 }
