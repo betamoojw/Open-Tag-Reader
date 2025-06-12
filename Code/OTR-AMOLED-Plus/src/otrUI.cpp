@@ -307,8 +307,8 @@ void updateBatteryImage(void)   {
         Serial.println(chargeStatus);
         // char batteryStatusStr[70];
         // sprintf(batteryStatusStr, "Battery = \n%dmV\nCharge \nStatus =%d", voltage, chargeStatus);
-        // lv_label_set_text(ui_Main_Label_Testing, batteryStatusStr);
-        // lv_obj_set_style_text_align(ui_Main_Label_Testing, LV_TEXT_ALIGN_CENTER, 0);
+        // lv_label_set_text(ui_Main_Label_RFID, batteryStatusStr);
+        // lv_obj_set_style_text_align(ui_Main_Label_RFID, LV_TEXT_ALIGN_CENTER, 0);
     #endif
 
 }
@@ -341,7 +341,7 @@ void successfulScan(String scanResult)   {
     counter++;
     lv_label_set_text(ui_Main_Counter, String(counter).c_str());
     lv_obj_clear_flag(ui_Main_Counter, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text(ui_Main_Label_Testing, scanResult.c_str());
+    lv_label_set_text(ui_Main_Label_RFID, scanResult.c_str());
     lv_label_set_text(ui_Main_LabelBottom, "Scan OK");
     lv_refr_now(lv_disp_get_default());
     buzzer.successTone();

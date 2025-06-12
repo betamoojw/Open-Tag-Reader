@@ -24,15 +24,19 @@ extern lv_obj_t * ui_Main_TopPanel;
 extern lv_obj_t * ui_Main_TopPanelBattery;
 void ui_event_Main_TopPanelScan(lv_event_t * e);
 extern lv_obj_t * ui_Main_TopPanelScan;
+void ui_event_Main_TopPanelButtonSettings(lv_event_t * e);
 extern lv_obj_t * ui_Main_TopPanelButtonSettings;
 void ui_event_Main_TopPanelButtonTime(lv_event_t * e);
 extern lv_obj_t * ui_Main_TopPanelButtonTime;
 extern lv_obj_t * ui_Main_TopPanelTime;
 extern lv_obj_t * ui_Main_Label_Title;
-extern lv_obj_t * ui_Main_Label_Testing;
+extern lv_obj_t * ui_Main_Label_RFID;
 extern lv_obj_t * ui_Main_LabelBottom;
 extern lv_obj_t * ui_Main_Panel1;
 extern lv_obj_t * ui_Main_Counter;
+extern lv_obj_t * ui_Main_Label_Session;
+extern lv_obj_t * ui_Main_Label_Location;
+extern lv_obj_t * ui_Main_Label_VisualID;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Time
@@ -96,6 +100,12 @@ extern lv_obj_t * ui_AddAnimal_Label3;
 extern lv_obj_t * ui_AddAnimal_RFID;
 extern lv_obj_t * ui_AddAnimal_Label5;
 extern lv_obj_t * ui_AddAnimal_Treatment;
+// CUSTOM VARIABLES
+
+// SCREEN: ui_Settings
+void ui_Settings_screen_init(void);
+extern lv_obj_t * ui_Settings;
+extern lv_obj_t * ui_Settings_Label_Top;
 // CUSTOM VARIABLES
 
 // EVENTS

@@ -9,7 +9,7 @@ void initFileSystem(void) {
        
         if (!littleFSMounted) {
             
-            Serial.println("An Error has occurred while mounting LittleFS"); delay(1000);
+            Serial.println("An Error has occurred while mounting LittleFS");
         } else {
             Serial.println("LittleFS Mounted");
             uint64_t littlefsSize = LittleFS.totalBytes() / 1024; //KB
@@ -27,8 +27,8 @@ void SD_init(void)  {
     //Note that the SD Card will already be mounted amoled.begin
     bool mounted = amoled.installSD();
     #ifdef OTR_DEBUG
-        lv_label_set_recolor(ui_Main_Label_Testing, true);
-        lv_label_set_text_fmt(ui_Main_Label_Testing, "SD Card \n%s", 
+        lv_label_set_recolor(ui_Main_Label_RFID, true);
+        lv_label_set_text_fmt(ui_Main_Label_RFID, "SD Card \n%s", 
             mounted ? "#00ff00 Mounted" : "#ff0000 Not Mounted");
         if (!mounted) {
             Serial.println("SD Card Mount Failed");            

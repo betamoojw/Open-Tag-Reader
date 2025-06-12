@@ -65,8 +65,9 @@ void setup()
         uint32_t bootTime = bootMillis - startMillis;
         uint32_t uiLoadTime = uiMillis - bootMillis;
         char bootTimeString[60];
-        sprintf(bootTimeString, "Boot time =\n%dms\nUI Load Time =\n%dms", bootTime, uiLoadTime);
-        lv_label_set_text(ui_Main_Label_Testing, bootTimeString);
+        sprintf(bootTimeString, "Boot time = %dms nUI Load Time = %dms", bootTime, uiLoadTime);
+        Serial.println(bootTimeString);
+        //lv_label_set_text(ui_Main_Label_RFID, bootTimeString);
         
         
     #endif

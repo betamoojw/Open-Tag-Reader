@@ -3,6 +3,7 @@ SET(SOURCES screens/ui_Main.c
     screens/ui_SetTime.c
     screens/ui_Session.c
     screens/ui_Tagging.c
+    screens/ui_Settings.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c
