@@ -16,15 +16,19 @@ lv_obj_t * ui_Main_TopPanel;
 lv_obj_t * ui_Main_TopPanelBattery;
 void ui_event_Main_TopPanelScan(lv_event_t * e);
 lv_obj_t * ui_Main_TopPanelScan;
+void ui_event_Main_TopPanelButtonSettings(lv_event_t * e);
 lv_obj_t * ui_Main_TopPanelButtonSettings;
 void ui_event_Main_TopPanelButtonTime(lv_event_t * e);
 lv_obj_t * ui_Main_TopPanelButtonTime;
 lv_obj_t * ui_Main_TopPanelTime;
 lv_obj_t * ui_Main_Label_Title;
-lv_obj_t * ui_Main_Label_Testing;
+lv_obj_t * ui_Main_Label_RFID;
 lv_obj_t * ui_Main_LabelBottom;
 lv_obj_t * ui_Main_Panel1;
 lv_obj_t * ui_Main_Counter;
+lv_obj_t * ui_Main_Label_Session;
+lv_obj_t * ui_Main_Label_Location;
+lv_obj_t * ui_Main_Label_VisualID;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Time
@@ -90,6 +94,12 @@ lv_obj_t * ui_AddAnimal_Label5;
 lv_obj_t * ui_AddAnimal_Treatment;
 // CUSTOM VARIABLES
 
+// SCREEN: ui_Settings
+void ui_Settings_screen_init(void);
+lv_obj_t * ui_Settings;
+lv_obj_t * ui_Settings_Label_Top;
+// CUSTOM VARIABLES
+
 // EVENTS
 lv_obj_t * ui____initial_actions0;
 
@@ -113,6 +123,10 @@ void ui_event_Main(lv_event_t * e)
     if(event_code == LV_EVENT_SCREEN_LOADED) {
         mainScreenLoaded(e);
     }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Session, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Session_screen_init);
+    }
 }
 
 void ui_event_Main_TopPanelScan(lv_event_t * e)
@@ -121,6 +135,15 @@ void ui_event_Main_TopPanelScan(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         tetherClicked(e);
+    }
+}
+
+void ui_event_Main_TopPanelButtonSettings(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Settings, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Settings_screen_init);
     }
 }
 
@@ -228,6 +251,7 @@ void ui_init(void)
     ui_SetTime_screen_init();
     ui_Session_screen_init();
     ui_Tagging_screen_init();
+    ui_Settings_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Main);
 }

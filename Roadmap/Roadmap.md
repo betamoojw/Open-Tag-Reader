@@ -37,6 +37,12 @@ The Open-Tag-Reader project is an ESP-based RFID ear tag scanning solution desig
 * Tag Status - Unused, Active, Inactive
 * bucket.csv - bucket file provided by manufacturer
 
+🔲 Filehandling on device to streamline data flow
+* Show files/directories and storage info on screen
+* Add ability to view file contents on screen
+* Add ability to download files over hotspot
+* Device as Mass Storage 
+
 🔲 Develop CSV file handling to store scan records.
 * animals.csv - animal associated with tag 
 * Animal Status - Alive, Dead, Sold

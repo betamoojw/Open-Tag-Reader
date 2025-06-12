@@ -82,12 +82,12 @@ void ui_Main_screen_init(void)
     lv_obj_set_style_text_align(ui_Main_Label_Title, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Main_Label_Title, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Main_Label_Testing = lv_label_create(ui_Main);
-    lv_obj_set_width(ui_Main_Label_Testing, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Main_Label_Testing, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_Main_Label_Testing, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Main_Label_Testing, "900 123456789012");
-    lv_obj_set_style_text_font(ui_Main_Label_Testing, &lv_font_montserrat_24, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_Main_Label_RFID = lv_label_create(ui_Main);
+    lv_obj_set_width(ui_Main_Label_RFID, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Main_Label_RFID, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Main_Label_RFID, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Main_Label_RFID, "900 123456789012");
+    lv_obj_set_style_text_font(ui_Main_Label_RFID, &lv_font_montserrat_24, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Main_LabelBottom = lv_label_create(ui_Main);
     lv_obj_set_width(ui_Main_LabelBottom, LV_SIZE_CONTENT);   /// 1
@@ -118,7 +118,43 @@ void ui_Main_screen_init(void)
     lv_obj_set_style_text_align(ui_Main_Counter, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Main_Counter, &ui_font_BIG, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Main_Label_Session = lv_label_create(ui_Main);
+    lv_obj_set_width(ui_Main_Label_Session, lv_pct(90));
+    lv_obj_set_height(ui_Main_Label_Session, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Main_Label_Session, lv_pct(0));
+    lv_obj_set_y(ui_Main_Label_Session, lv_pct(-18));
+    lv_obj_set_align(ui_Main_Label_Session, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_Main_Label_Session, LV_LABEL_LONG_SCROLL_CIRCULAR);
+    lv_label_set_text(ui_Main_Label_Session, "Swipe right for sessions...");
+    lv_obj_set_style_text_font(ui_Main_Label_Session, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Main_Label_Location = lv_label_create(ui_Main);
+    lv_obj_set_width(ui_Main_Label_Location, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Main_Label_Location, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Main_Label_Location, lv_pct(0));
+    lv_obj_set_y(ui_Main_Label_Location, lv_pct(-10));
+    lv_obj_set_align(ui_Main_Label_Location, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Main_Label_Location, "Location");
+    lv_obj_set_style_text_font(ui_Main_Label_Location, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Main_Label_VisualID = lv_label_create(ui_Main);
+    lv_obj_set_width(ui_Main_Label_VisualID, lv_pct(90));
+    lv_obj_set_height(ui_Main_Label_VisualID, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Main_Label_VisualID, lv_pct(0));
+    lv_obj_set_y(ui_Main_Label_VisualID, lv_pct(8));
+    lv_obj_set_align(ui_Main_Label_VisualID, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_Main_Label_VisualID, LV_LABEL_LONG_SCROLL_CIRCULAR);
+    lv_label_set_text(ui_Main_Label_VisualID, "VISUAL ID");
+    lv_label_set_recolor(ui_Main_Label_VisualID, "true");
+    lv_obj_set_style_text_color(ui_Main_Label_VisualID, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_Main_Label_VisualID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(ui_Main_Label_VisualID, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Main_Label_VisualID, &lv_font_montserrat_34, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_Main_Label_VisualID, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Main_Label_VisualID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_obj_add_event_cb(ui_Main_TopPanelScan, ui_event_Main_TopPanelScan, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Main_TopPanelButtonSettings, ui_event_Main_TopPanelButtonSettings, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main_TopPanelButtonTime, ui_event_Main_TopPanelButtonTime, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main, ui_event_Main, LV_EVENT_ALL, NULL);
 
