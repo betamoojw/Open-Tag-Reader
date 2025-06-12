@@ -109,6 +109,7 @@ void setup()
     //TESTING
     // buzzer.successTone();
     //playClickGoesTheShears(16);
+    Serial.println("\n" + listSDCardContents());
     
 
     //Network

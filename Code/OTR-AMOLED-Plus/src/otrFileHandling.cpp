@@ -195,33 +195,7 @@ void appendNewLine(const char* filePath, char** bucketRow) {
 //     // return fileName;
 // }
 
-void listDir(const char * dirname) {
-  Serial.printf("Listing directory: %s\n", dirname);
 
-  File root = LittleFS.open(dirname);
-  if (!root) {
-    Serial.println("- failed to open directory");
-    return;
-  }
-  if (!root.isDirectory()) {
-    Serial.println(" - not a directory");
-    return;
-  }
-
-  File file = root.openNextFile();
-  while (file) {
-    if (file.isDirectory()) {
-      Serial.print("DIR : ");
-      Serial.println(file.name());
-    } else {
-      Serial.print("FILE: ");
-      Serial.print(file.name());
-      Serial.print("\tSIZE: ");
-      Serial.println(file.size());
-    }
-    file = root.openNextFile();
-  }
-}
 
 String readLittleFSFileToString(const char *filename) {
   File file = LittleFS.open(filename, "r");
@@ -255,37 +229,63 @@ String readSDFileToString(const char *filename) {
   }
 }
 
-void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
+String listSDCardContents() {
+  String treeListing = "SD card Contents:\n";
+  treeListing += listDir(SD, "/", 0);
+  return treeListing;
+}
+String listDir(fs::FS &fs, const char *dirname, uint8_t currentIndent)
 {
-    Serial.printf("Listing directory: %s\n", dirname);
-
+    String contentList = "";
+    return contentList;
     File root = fs.open(dirname);
-    if (!root) {
-        Serial.println("Failed to open directory");
-        return;
-    }
-    if (!root.isDirectory()) {
-        Serial.println("Not a directory");
-        
-        return;
+  if (!root) {
+    contentList += "Failed to open directory: ";
+    contentList += dirname;
+    contentList += "\n";
+    return contentList;
+  }
+  if (!root.isDirectory()) {
+    contentList += dirname;
+    contentList += " is not a directory.\n";
+    root.close();
+    return contentList;
+  }
+
+  File file = root.openNextFile();
+  while (file) {
+    // Add indentation for the current item
+    for (int i = 0; i < currentIndent; i++) {
+      contentList += "  "; // Two spaces per indentation level
     }
 
-    File file = root.openNextFile();
-    while (file) {
-        if (file.isDirectory()) {
-            Serial.print("  DIR : ");
-            Serial.println(file.name());
-            if (levels) {
-                listDir(fs, file.path(), levels - 1);
-            }
-        } else {
-            Serial.print("  FILE: ");
-            Serial.print(file.name());
-            Serial.print("  SIZE: ");
-            Serial.println(file.size());
-        }
-        file = root.openNextFile();
+    contentList += file.name(); // Just the name, no leading dash
+
+    // Get and format last write time
+    time_t lastWriteTime = file.getLastWrite();
+    struct tm *tm_info = localtime(&lastWriteTime);
+    char timeStr[20];
+    // Format: YYYY-MM-DD HH:MM:SS
+    strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
+
+    if (file.isDirectory()) {
+      contentList += "/ (Modified: "; // Indicate a directory with a slash
+      contentList += timeStr;
+      contentList += ")\n";
+      // Recursively call for subdirectory, increasing indentation level
+      // Note: The original 'levels' parameter is replaced by 'currentIndent'
+      contentList += listDir(fs, file.path(), currentIndent + 1);
+    } else {
+      contentList += " (Size: ";
+      contentList += file.size();
+      contentList += " bytes, Modified: ";
+      contentList += timeStr;
+      contentList += ")\n";
     }
+    file.close(); // Crucially, close the file/directory after processing
+    file = root.openNextFile(); // Move to the next item
+  }
+  root.close(); // Close the current directory after listing all its contents
 }
 
 void createDir(fs::FS &fs, const char *path)
