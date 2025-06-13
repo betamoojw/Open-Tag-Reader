@@ -37,10 +37,12 @@ void ui_Settings_screen_init(void)
 
     ui_Settings_TabPageStorage = lv_tabview_add_tab(ui_Settings_TabView, "Storage");
 
-    ui_Settings_TextArea2 = lv_textarea_create(ui_Settings_TabPageStorage);
-    lv_obj_set_width(ui_Settings_TextArea2, lv_pct(100));
-    lv_obj_set_height(ui_Settings_TextArea2, lv_pct(100));
-    lv_obj_set_align(ui_Settings_TextArea2, LV_ALIGN_CENTER);
-    lv_textarea_set_placeholder_text(ui_Settings_TextArea2, "Storage...");
+    ui_Settings_TextAreaStorage = lv_textarea_create(ui_Settings_TabPageStorage);
+    lv_obj_set_width(ui_Settings_TextAreaStorage, lv_pct(100));
+    lv_obj_set_height(ui_Settings_TextAreaStorage, lv_pct(100));
+    lv_obj_set_align(ui_Settings_TextAreaStorage, LV_ALIGN_CENTER);
+    lv_textarea_set_placeholder_text(ui_Settings_TextAreaStorage, "Storage...");
+
+    lv_obj_add_event_cb(ui_Settings_TabPageFiles, ui_event_Settings_TabPageFiles, LV_EVENT_ALL, NULL);
 
 }

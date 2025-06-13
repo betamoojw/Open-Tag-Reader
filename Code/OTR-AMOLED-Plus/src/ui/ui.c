@@ -100,10 +100,11 @@ void ui_Settings_screen_init(void);
 lv_obj_t * ui_Settings;
 lv_obj_t * ui_Settings_Label_Top;
 lv_obj_t * ui_Settings_TabView;
+void ui_event_Settings_TabPageFiles(lv_event_t * e);
 lv_obj_t * ui_Settings_TabPageFiles;
 lv_obj_t * ui_Settings_TextAreaFiles;
 lv_obj_t * ui_Settings_TabPageStorage;
-lv_obj_t * ui_Settings_TextArea2;
+lv_obj_t * ui_Settings_TextAreaStorage;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -241,6 +242,15 @@ void ui_event_Date_RollerMonth(lv_event_t * e)
 
     if(event_code == LV_EVENT_VALUE_CHANGED) {
         roller_update(e);
+    }
+}
+
+void ui_event_Settings_TabPageFiles(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        settingFilesTabSelected(e);
     }
 }
 

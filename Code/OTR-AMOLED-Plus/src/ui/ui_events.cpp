@@ -41,3 +41,8 @@ void tetherClicked(lv_event_t * e)
 {
 	// Your code here
 }
+
+void settingFilesTabSelected(lv_event_t * e)
+{
+	displayFileSystemContents();
+}

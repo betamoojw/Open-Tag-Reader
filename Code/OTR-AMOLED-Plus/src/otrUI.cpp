@@ -367,3 +367,10 @@ void duplicateScan(void)    {
         lv_timer_del(t);
     }, 500, NULL);
 }
+void displayFileSystemContents(void)    {
+    lv_textarea_set_text(ui_Settings_TextAreaFiles,listSDCardContents().c_str());
+}
+
+void displayStorageInfo(void)   {
+    lv_textarea_set_text(ui_Settings_TextAreaStorage, "up yours!");
+}

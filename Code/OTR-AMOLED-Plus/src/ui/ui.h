@@ -108,10 +108,11 @@ void ui_Settings_screen_init(void);
 extern lv_obj_t * ui_Settings;
 extern lv_obj_t * ui_Settings_Label_Top;
 extern lv_obj_t * ui_Settings_TabView;
+void ui_event_Settings_TabPageFiles(lv_event_t * e);
 extern lv_obj_t * ui_Settings_TabPageFiles;
 extern lv_obj_t * ui_Settings_TextAreaFiles;
 extern lv_obj_t * ui_Settings_TabPageStorage;
-extern lv_obj_t * ui_Settings_TextArea2;
+extern lv_obj_t * ui_Settings_TextAreaStorage;
 // CUSTOM VARIABLES
 
 // EVENTS

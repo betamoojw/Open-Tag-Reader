@@ -476,3 +476,33 @@ bool moveFileSD(const char* sourcePath, const char* destinationPath) {
     return false; // Return false if the rename (move) operation failed
   }
 }
+
+String fileSystemStatistics() {
+        uint32_t size = SD.cardSize() / (1024 * 1024);
+    uint32_t totalBytes = SD.totalBytes() / (1024 * 1024);
+    uint32_t usedBytes = SD.usedBytes() / (1024 * 1024);
+    Serial.printf(" SD card Size: %d MB, Total: %d MB, Used: %d MB\n", size, totalBytes, usedBytes);
+    uint64_t psramSize = ESP.getPsramSize() / 1024; //KB
+    uint64_t flashSize = ESP.getFlashChipSize() / 1024; //KB
+    uint64_t littlefsSize = LittleFS.totalBytes() / 1024; //KB
+    uint64_t littlefsUsed = LittleFS.usedBytes() / 1024; //KB
+    Serial.printf(" psram size: %d kb\r\n", psramSize);
+    Serial.printf(" FLASH size: %d kb\r\n", flashSize);
+    Serial.printf(" LittleFS total: %d kb\r\n", littlefsSize);
+    Serial.printf(" LittleFS used: %d kb\r\n", littlefsUsed);
+    String stats = "SD Card:\n";
+    stats += " Card Size: " + String(SD.cardSize() / (1024 * 1024)) + " Mb\n";
+    stats += " Total Space: " + String(SD.totalBytes() / (1024 * 1024)) + " Mb\n";
+    stats += " Used Space: " + String(SD.usedBytes()/(1024 * 1024)) + " Mb\n";
+    stats += " Free Space: " + String((SD.totalBytes() - SD.usedBytes()) / (1024 * 1024)) + " Mb\n";
+    stats += "Internal Storage:\n";
+    stats += " Total Space: " + String(LittleFS.totalBytes() / (1024)) + " kb\n";
+    stats += " Used Space: " + String(LittleFS.usedBytes() / (1024)) + " kb\n";
+    stats += "PSRAM: " + String(ESP.getPsramSize() / 1024) + " kb\n";
+    stats += "Flash: " + String(ESP.getFlashChipSize() / 1024) + " kb\n";
+    Serial.printf(" psram size: %d kb\r\n", psramSize);
+    Serial.printf(" FLASH size: %d kb\r\n", flashSize);
+    Serial.printf(" LittleFS total: %d kb\r\n", littlefsSize);
+    Serial.printf(" LittleFS used: %d kb\r\n", littlefsUsed);
+    return stats;
+}
