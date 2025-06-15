@@ -37,7 +37,6 @@ extern lv_obj_t * ui_Main_Counter;
 extern lv_obj_t * ui_Main_Label_Session;
 extern lv_obj_t * ui_Main_Label_Location;
 extern lv_obj_t * ui_Main_Label_VisualID;
-extern lv_obj_t * ui_Main_TabView1;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Time
@@ -80,6 +79,7 @@ extern lv_obj_t * ui_Date_RollerMonth;
 
 // SCREEN: ui_Session
 void ui_Session_screen_init(void);
+void ui_event_Session(lv_event_t * e);
 extern lv_obj_t * ui_Session;
 extern lv_obj_t * ui_Session_NewButton;
 extern lv_obj_t * ui_SessionNewButton_Label;
@@ -105,10 +105,10 @@ extern lv_obj_t * ui_AddAnimal_Treatment;
 
 // SCREEN: ui_Settings
 void ui_Settings_screen_init(void);
+void ui_event_Settings(lv_event_t * e);
 extern lv_obj_t * ui_Settings;
 extern lv_obj_t * ui_Settings_Label_Top;
 extern lv_obj_t * ui_Settings_TabView;
-void ui_event_Settings_TabPageFiles(lv_event_t * e);
 extern lv_obj_t * ui_Settings_TabPageFiles;
 extern lv_obj_t * ui_Settings_TextAreaFiles;
 extern lv_obj_t * ui_Settings_TabPageStorage;

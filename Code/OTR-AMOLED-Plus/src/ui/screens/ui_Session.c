@@ -50,4 +50,6 @@ void ui_Session_screen_init(void)
     lv_obj_set_y(ui_Session_Roller1, lv_pct(15));
     lv_obj_set_align(ui_Session_Roller1, LV_ALIGN_CENTER);
 
+    lv_obj_add_event_cb(ui_Session, ui_event_Session, LV_EVENT_ALL, NULL);
+
 }

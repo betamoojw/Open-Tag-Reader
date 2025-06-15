@@ -29,7 +29,6 @@ lv_obj_t * ui_Main_Counter;
 lv_obj_t * ui_Main_Label_Session;
 lv_obj_t * ui_Main_Label_Location;
 lv_obj_t * ui_Main_Label_VisualID;
-lv_obj_t * ui_Main_TabView1;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Time
@@ -72,6 +71,7 @@ lv_obj_t * ui_Date_RollerMonth;
 
 // SCREEN: ui_Session
 void ui_Session_screen_init(void);
+void ui_event_Session(lv_event_t * e);
 lv_obj_t * ui_Session;
 lv_obj_t * ui_Session_NewButton;
 lv_obj_t * ui_SessionNewButton_Label;
@@ -97,10 +97,10 @@ lv_obj_t * ui_AddAnimal_Treatment;
 
 // SCREEN: ui_Settings
 void ui_Settings_screen_init(void);
+void ui_event_Settings(lv_event_t * e);
 lv_obj_t * ui_Settings;
 lv_obj_t * ui_Settings_Label_Top;
 lv_obj_t * ui_Settings_TabView;
-void ui_event_Settings_TabPageFiles(lv_event_t * e);
 lv_obj_t * ui_Settings_TabPageFiles;
 lv_obj_t * ui_Settings_TextAreaFiles;
 lv_obj_t * ui_Settings_TabPageStorage;
@@ -245,12 +245,22 @@ void ui_event_Date_RollerMonth(lv_event_t * e)
     }
 }
 
-void ui_event_Settings_TabPageFiles(lv_event_t * e)
+void ui_event_Session(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_CLICKED) {
-        settingFilesTabSelected(e);
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_Main_screen_init);
+    }
+}
+
+void ui_event_Settings(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOADED) {
+        settingsScreenLoaded(e);
     }
 }
 

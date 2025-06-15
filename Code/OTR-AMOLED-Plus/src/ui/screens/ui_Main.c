@@ -153,12 +153,6 @@ void ui_Main_screen_init(void)
     lv_obj_set_style_bg_color(ui_Main_Label_VisualID, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Main_Label_VisualID, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Main_TabView1 = lv_tabview_create(ui_Main, LV_DIR_TOP, 50);
-    lv_obj_set_width(ui_Main_TabView1, 100);
-    lv_obj_set_height(ui_Main_TabView1, 200);
-    lv_obj_set_align(ui_Main_TabView1, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_Main_TabView1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-
     lv_obj_add_event_cb(ui_Main_TopPanelScan, ui_event_Main_TopPanelScan, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main_TopPanelButtonSettings, ui_event_Main_TopPanelButtonSettings, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main_TopPanelButtonTime, ui_event_Main_TopPanelButtonTime, LV_EVENT_ALL, NULL);

@@ -111,6 +111,7 @@ void setup()
     // buzzer.successTone();
     //playClickGoesTheShears(16);
     Serial.println("\n" + listSDCardContents());
+    Serial.println("\n" + listLittleFSContents());
     
     
 

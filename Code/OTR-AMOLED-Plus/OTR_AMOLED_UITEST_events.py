@@ -50,3 +50,11 @@ def mainScreenLoaded(event_struct):
 def tetherClicked(event_struct):
     return
 
+
+def settingFilesTabSelected(event_struct):
+    return
+
+
+def settingsScreenLoaded(event_struct):
+    return
+

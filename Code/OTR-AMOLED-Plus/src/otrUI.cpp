@@ -132,6 +132,8 @@ void homeButtonShortPress(void) {
     //toggleBlankScreen();
     //vibrate.longBuzz();
     //buzzer.shortBeep();
+    Serial.println("\n" + listSDCardContents());
+    Serial.println("\n" + listLittleFSContents());
     #ifdef OTR_DEBUG
         Serial.println("Home Key - Short press!");
     #endif
@@ -369,6 +371,7 @@ void duplicateScan(void)    {
 }
 void displayFileSystemContents(void)    {
     lv_textarea_set_text(ui_Settings_TextAreaFiles,listSDCardContents().c_str());
+    lv_textarea_add_text(ui_Settings_TextAreaFiles, "poop");
 }
 
 void displayStorageInfo(void)   {

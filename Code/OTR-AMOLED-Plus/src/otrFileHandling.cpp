@@ -153,59 +153,16 @@ void createExampleFile() {
   }
 }
 
-void appendNewLine(const char* filePath, char** bucketRow) {
-    File file = LittleFS.open(filePath, "a");
-    if (!file) {
-    Serial.println("Failed to open file for appending.");
-    return;
-    }
-    file.print(bucketRow[0]);
-    file.print(",");
-    file.print(bucketRow[1]);
-    file.print(",");
-    file.print(bucketRow[2]);
-    file.print(",");
-    file.print(bucketRow[3]);
-    file.print(",");
-    file.print(bucketRow[4]);
-    file.print(",\"0\",\"0\",\"\",\"0\",\"0\""); // add placeholders for gender, status, name, group and location
-    file.println(); // Write the line with a newline character
-    file.close();
-}
-
-// String create_new_list() {
-//     // //DateTime now = rtc.now();
-
-//     // String baseName = "-scans.csv";
-//     // //String currentDate = String(now.year()) + "-" + String(now.month()) + "-" + String(now.day());
-//     // String fileName = "/" + currentDate + baseName;
-//     // int counter = 1;
-
-//     // while (LittleFS.exists(fileName.c_str())) {
-//     //     fileName = "/" + currentDate + baseName.substring(0, baseName.indexOf('.')) + "-" + String(counter) + ".csv";
-//     //     counter++;
-//     // }
-
-//     // File file = LittleFS.open(fileName.c_str(), "w");
-//     // if (file) {
-//     //     // Add content to the file if needed
-//     //     file.close();
-//     // }
-    
-//     // return fileName;
-// }
-
-
 
 String readLittleFSFileToString(const char *filename) {
   File file = LittleFS.open(filename, "r");
   if (file) {
-    String html;
+    String contents;
     while (file.available()) {
-      html += file.readStringUntil('\n');
+      contents += file.readStringUntil('\n');
     }
     file.close();
-    return html;
+    return contents;
   } else {
     return "";
   }
@@ -231,195 +188,110 @@ String readSDFileToString(const char *filename) {
 
 String listSDCardContents() {
   String treeListing = "SD card Contents:\n";
-  treeListing += listDir(SD, "/", 0);
+  treeListing += listDirSD("/", 0);
   return treeListing;
 }
-String listDir(fs::FS &fs, const char *dirname, uint8_t currentIndent)
+String listDirSD(const char *dirname, uint8_t currentIndent)
 {
     String contentList = "";
-    return contentList;
-    File root = fs.open(dirname);
-  if (!root) {
-    contentList += "Failed to open directory: ";
-    contentList += dirname;
-    contentList += "\n";
-    return contentList;
-  }
-  if (!root.isDirectory()) {
-    contentList += dirname;
-    contentList += " is not a directory.\n";
-    root.close();
-    return contentList;
-  }
-
-  File file = root.openNextFile();
-  while (file) {
-    // Add indentation for the current item
-    for (int i = 0; i < currentIndent; i++) {
-      contentList += "  "; // Two spaces per indentation level
+    File root = SD.open(dirname);
+    if (!root) {
+        contentList += "Failed to open directory: ";
+        contentList += dirname;
+        contentList += "\n";
+        return contentList;
+    }
+    if (!root.isDirectory()) {
+        contentList += dirname;
+        contentList += " is not a directory.\n";
+        root.close();
+        return contentList;
     }
 
-    contentList += file.name(); // Just the name, no leading dash
-
-    // Get and format last write time
-    time_t lastWriteTime = file.getLastWrite();
-    struct tm *tm_info = localtime(&lastWriteTime);
-    char timeStr[20];
-    // Format: YYYY-MM-DD HH:MM:SS
-    strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
-
-    if (file.isDirectory()) {
-      contentList += "/ (Modified: "; // Indicate a directory with a slash
-      contentList += timeStr;
-      contentList += ")\n";
-      // Recursively call for subdirectory, increasing indentation level
-      // Note: The original 'levels' parameter is replaced by 'currentIndent'
-      contentList += listDir(fs, file.path(), currentIndent + 1);
-    } else {
-      contentList += " (Size: ";
-      contentList += file.size();
-      contentList += " bytes, Modified: ";
-      contentList += timeStr;
-      contentList += ")\n";
-    }
-    file.close(); // Crucially, close the file/directory after processing
-    file = root.openNextFile(); // Move to the next item
-  }
-  root.close(); // Close the current directory after listing all its contents
-}
-
-void createDir(fs::FS &fs, const char *path)
-{
-    Serial.printf("Creating Dir: %s\n", path);
-    if (fs.mkdir(path)) {
-        Serial.println("Dir created");
-    } else {
-        Serial.println("mkdir failed");
-    }
-}
-
-void removeDir(fs::FS &fs, const char *path)
-{
-    Serial.printf("Removing Dir: %s\n", path);
-    if (fs.rmdir(path)) {
-        Serial.println("Dir removed");
-    } else {
-        Serial.println("rmdir failed");
-    }
-}
-
-void readFile(fs::FS &fs, const char *path)
-{
-    Serial.printf("Reading file: %s\n", path);
-
-    File file = fs.open(path);
-    if (!file) {
-        Serial.println("Failed to open file for reading");
-        return;
-    }
-
-    Serial.print("Read from file: ");
-    while (file.available()) {
-        Serial.write(file.read());
-    }
-    file.close();
-}
-
-void writeFile(fs::FS &fs, const char *path, const char *message)
-{
-    Serial.printf("Writing file: %s\n", path);
-
-    File file = fs.open(path, FILE_WRITE);
-    if (!file) {
-        Serial.println("Failed to open file for writing");
-        return;
-    }
-    if (file.print(message)) {
-        Serial.println("File written");
-    } else {
-        Serial.println("Write failed");
-    }
-    file.close();
-}
-
-void appendFile(fs::FS &fs, const char *path, const char *message)
-{
-    Serial.printf("Appending to file: %s\n", path);
-
-    File file = fs.open(path, FILE_APPEND);
-    if (!file) {
-        Serial.println("Failed to open file for appending");
-        return;
-    }
-    if (file.print(message)) {
-        Serial.println("Message appended");
-    } else {
-        Serial.println("Append failed");
-    }
-    file.close();
-}
-
-void renameFile(fs::FS &fs, const char *path1, const char *path2)
-{
-    Serial.printf("Renaming file %s to %s\n", path1, path2);
-    if (fs.rename(path1, path2)) {
-        Serial.println("File renamed");
-    } else {
-        Serial.println("Rename failed");
-    }
-}
-
-void deleteFile(fs::FS &fs, const char *path)
-{
-    Serial.printf("Deleting file: %s\n", path);
-    if (fs.remove(path)) {
-        Serial.println("File deleted");
-    } else {
-        Serial.println("Delete failed");
-    }
-}
-
-void testFileIO(fs::FS &fs, const char *path)
-{
-    File file = fs.open(path);
-    static uint8_t buf[512];
-    size_t len = 0;
-    uint32_t start = millis();
-    uint32_t end = start;
-    if (file) {
-        len = file.size();
-        size_t flen = len;
-        start = millis();
-        while (len) {
-            size_t toRead = len;
-            if (toRead > 512) {
-                toRead = 512;
-            }
-            file.read(buf, toRead);
-            len -= toRead;
+    File file = root.openNextFile();
+    while (file) {
+        for (int i = 0; i < currentIndent; i++) {
+            contentList += "  ";
         }
-        end = millis() - start;
-        Serial.printf("%u bytes read for %u ms\n", flen, end);
-        file.close();
-    } else {
-        Serial.println("Failed to open file for reading");
+        contentList += file.name(); 
+        // Get and format last write time
+        time_t lastWriteTime = file.getLastWrite();
+        struct tm *tm_info = localtime(&lastWriteTime);
+        char timeStr[20];
+        // Format: YYYY-MM-DD HH:MM:SS
+        strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
+
+        if (file.isDirectory()) {
+            contentList += "/ (Modified: "; 
+            contentList += timeStr;
+            contentList += ")\n";
+            // Recursively call for subdirectory, increasing indentation level
+            contentList += listDirSD(file.path(), currentIndent + 1);
+        } else {
+            contentList += " (Size: ";
+            contentList += file.size();
+            contentList += " bytes, Modified: ";
+            contentList += timeStr;
+            contentList += ")\n";
+        }
+        file.close(); 
+        file = root.openNextFile(); 
+    }
+    return contentList; 
+}
+
+String listLittleFSContents() {
+  String treeListing = "LittleFS File Structure:\n";
+  treeListing += listDirLittleFS("/", 0);
+  return treeListing;
+}
+String listDirLittleFS(const char *dirname, uint8_t currentIndent)
+{
+    String contentList = "";
+    File root = LittleFS.open(dirname);
+    if (!root) {
+        contentList += "Failed to open directory: ";
+        contentList += dirname;
+        contentList += "\n";
+        return contentList;
+    }
+    if (!root.isDirectory()) {
+        contentList += dirname;
+        contentList += " is not a directory.\n";
+        root.close();
+        return contentList;
     }
 
+    File file = root.openNextFile();
+    while (file) {
+        for (int i = 0; i < currentIndent; i++) {
+            contentList += "  ";
+        }
+        contentList += file.name(); 
+        // Get and format last write time
+        time_t lastWriteTime = file.getLastWrite();
+        struct tm *tm_info = localtime(&lastWriteTime);
+        char timeStr[20];
+        // Format: YYYY-MM-DD HH:MM:SS
+        strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
 
-    file = fs.open(path, FILE_WRITE);
-    if (!file) {
-        Serial.println("Failed to open file for writing");
-        return;
+        if (file.isDirectory()) {
+            contentList += "/ (Modified: "; 
+            contentList += timeStr;
+            contentList += ")\n";
+            // Recursively call for subdirectory, increasing indentation level
+            contentList += listDirLittleFS(file.path(), currentIndent + 1);
+        } else {
+            contentList += " (Size: ";
+            contentList += file.size();
+            contentList += " bytes, Modified: ";
+            contentList += timeStr;
+            contentList += ")\n";
+        }
+        file.close(); 
+        file = root.openNextFile(); 
     }
-
-    size_t i;
-    start = millis();
-    for (i = 0; i < 2048; i++) {
-        file.write(buf, 512);
-    }
-    end = millis() - start;
-    Serial.printf("%u bytes written for %u ms\n", 2048 * 512, end);
-    file.close();
+    return contentList; 
 }
 
 bool moveFileSD(const char* sourcePath, const char* destinationPath) {

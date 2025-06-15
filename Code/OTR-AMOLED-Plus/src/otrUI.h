@@ -36,7 +36,9 @@ void updateIPAddress(String ipAddressStr);
 void updateWiFiImage(void);
 void successfulScan(String scanResult);
 void duplicateScan(void);
-void displayFileSystemContents(void) 
+void displayFileSystemContents(void) ;
+void displayStorageInfo(void);
+
 
 
 #endif

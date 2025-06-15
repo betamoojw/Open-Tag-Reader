@@ -28,15 +28,9 @@ String listDirToString(const char * dirname);
 String readLittleFSFileToString(const char *filename);
 String readSDFileToString(const char *filename);
 String listSDCardContents();
-String listDir(fs::FS &fs, const char *dirname, uint8_t lcurrentIndex);
-void createDir(fs::FS &fs, const char *path);
-void removeDir(fs::FS &fs, const char *path);
-void readFile(fs::FS &fs, const char *path);
-void writeFile(fs::FS &fs, const char *path, const char *message);
-void appendFile(fs::FS &fs, const char *path, const char *message);
-void renameFile(fs::FS &fs, const char *path1, const char *path2);
-void deleteFile(fs::FS &fs, const char *path);
-void testFileIO(fs::FS &fs, const char *path);
+String listDirSD(const char *dirname, uint8_t currentIndex);
+String listLittleFSContents();
+String listDirLittleFS(const char *dirname, uint8_t currentIndex);
 bool moveFileSD(const char* sourcePath, const char* destinationPath);
 
 
