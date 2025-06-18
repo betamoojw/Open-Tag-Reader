@@ -38,3 +38,7 @@ def update_day_roller(event_struct):
 def date_changed(event_struct):
     return
 
+
+def main_screen_button_long_pressed(event_struct):
+    return
+
