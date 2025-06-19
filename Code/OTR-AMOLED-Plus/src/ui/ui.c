@@ -24,6 +24,7 @@ lv_obj_t * ui_Main_TopPanelTime;
 lv_obj_t * ui_Main_Label_Title;
 lv_obj_t * ui_Main_Label_RFID;
 lv_obj_t * ui_Main_LabelBottom;
+void ui_event_Main_Panel1(lv_event_t * e);
 lv_obj_t * ui_Main_Panel1;
 lv_obj_t * ui_Main_Counter;
 lv_obj_t * ui_Main_Label_Session;
@@ -163,6 +164,15 @@ void ui_event_Main_TopPanelButtonTime(lv_event_t * e)
     }
 }
 
+void ui_event_Main_Panel1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        counterClicked(e);
+    }
+}
+
 void ui_event_Time(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -252,6 +262,9 @@ void ui_event_Session(lv_event_t * e)
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_Main_screen_init);
+    }
+    if(event_code == LV_EVENT_SCREEN_LOADED) {
+        sessionScreenLoaded(e);
     }
 }
 

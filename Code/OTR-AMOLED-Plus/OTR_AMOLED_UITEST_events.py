@@ -58,3 +58,7 @@ def settingFilesTabSelected(event_struct):
 def settingsScreenLoaded(event_struct):
     return
 
+
+def counterClicked(event_struct):
+    return
+

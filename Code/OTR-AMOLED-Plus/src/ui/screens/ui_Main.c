@@ -156,6 +156,7 @@ void ui_Main_screen_init(void)
     lv_obj_add_event_cb(ui_Main_TopPanelScan, ui_event_Main_TopPanelScan, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main_TopPanelButtonSettings, ui_event_Main_TopPanelButtonSettings, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main_TopPanelButtonTime, ui_event_Main_TopPanelButtonTime, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Main_Panel1, ui_event_Main_Panel1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Main, ui_event_Main, LV_EVENT_ALL, NULL);
 
 }

@@ -32,6 +32,7 @@ extern lv_obj_t * ui_Main_TopPanelTime;
 extern lv_obj_t * ui_Main_Label_Title;
 extern lv_obj_t * ui_Main_Label_RFID;
 extern lv_obj_t * ui_Main_LabelBottom;
+void ui_event_Main_Panel1(lv_event_t * e);
 extern lv_obj_t * ui_Main_Panel1;
 extern lv_obj_t * ui_Main_Counter;
 extern lv_obj_t * ui_Main_Label_Session;
