@@ -44,21 +44,11 @@ void tetherClicked(lv_event_t * e)
 
 void settingFilesTabSelected(lv_event_t * e)
 {
-
+	
 }
 
 void settingsScreenLoaded(lv_event_t * e)
 {
 	displayFileSystemContents();
 	displayStorageInfo();
-}
-
-void counterClicked(lv_event_t * e)
-{
-	// Your code here
-}
-
-void sessionScreenLoaded(lv_event_t * e)
-{
-	// Your code here
 }

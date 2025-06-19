@@ -11,6 +11,7 @@ extern LilyGo_Class amoled;
 extern LED led;
 extern VIBRATE vibrate;
 extern BUZZER buzzer;
+extern RECORDS records;
 
 static uint8_t lastBri =0;
 
@@ -371,9 +372,13 @@ void duplicateScan(void)    {
 }
 void displayFileSystemContents(void)    {
     lv_textarea_set_text(ui_Settings_TextAreaFiles,listSDCardContents().c_str());
-    lv_textarea_add_text(ui_Settings_TextAreaFiles, "poop");
+    
 }
 
 void displayStorageInfo(void)   {
     lv_textarea_set_text(ui_Settings_TextAreaStorage, "up yours!");
+}
+void populateSessionList(void)  {
+    String sessionList = records.readLastSessions();
+    lv_roller_set_options(ui_Session_Roller1, sessionList.c_str(), LV_ROLLER_MODE_INFINITE);
 }

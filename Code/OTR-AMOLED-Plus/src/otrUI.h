@@ -13,6 +13,9 @@
 #include "otrTime.h"
 #include "otrNetwork.h"
 #include "otrFeedback.h"
+#include "otrData.h"
+#include "otrScanning.h"
+#include "otrWebInterface.h"
 
 
 void setupHomeButton(void);
@@ -38,6 +41,7 @@ void successfulScan(String scanResult);
 void duplicateScan(void);
 void displayFileSystemContents(void) ;
 void displayStorageInfo(void);
+void populateSessionList(void);
 
 
 

@@ -87,8 +87,8 @@ class RFIDReader {
 };
 
 extern WL_134A_RFID rfid;
-
+extern RFIDReader rfidreader;
 
 #endif
 
-extern RFIDReader rfidreader;
+

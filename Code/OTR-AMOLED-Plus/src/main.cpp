@@ -31,6 +31,7 @@ extern RFIDReader rfidreader;
 LED led;
 VIBRATE vibrate;
 BUZZER buzzer;
+RECORDS records;
 
 //CONFIG #################################
 bool readerBoard =0;  // 0 for Priority 1 (ASCII Output), 1 for WL134A
