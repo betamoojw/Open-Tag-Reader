@@ -2,7 +2,9 @@
 #include "otrFileHandling.h"
 #include "otrTime.h"
 #include "LilyGo_AMOLED.h"
-extern Species species;
+
+Species species = Sheep;
+extern RECORDS records;
 
 void TAGS::readTagsFile() {
     //Open file
@@ -784,6 +786,9 @@ String RECORDS::readLastSessions() {
     }
     file.close();
     sessionsDropdown = sessionsDropdown.substring(0, sessionsDropdown.length() - 1);
+    if (sessionsDropdown.isEmpty()) {
+        sessionsDropdown = "Empty";
+    }
     return sessionsDropdown;
     
 }
