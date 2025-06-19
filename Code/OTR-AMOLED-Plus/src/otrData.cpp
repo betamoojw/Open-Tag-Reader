@@ -788,6 +788,9 @@ String RECORDS::readLastSessions() {
     sessionsDropdown = sessionsDropdown.substring(0, sessionsDropdown.length() - 1);
     if (sessionsDropdown.isEmpty()) {
         sessionsDropdown = "Empty";
+        #ifdef OTR_DEBUG
+            Serial.println("RECORDS:readLastSessions-No sessions listed");
+        #endif
     }
     return sessionsDropdown;
     
