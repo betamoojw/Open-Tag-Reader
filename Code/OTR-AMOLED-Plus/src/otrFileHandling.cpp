@@ -20,6 +20,7 @@ void initFileSystem(void) {
         };
         
     #endif
+    checkFileStructure();
   
 }
 
@@ -43,6 +44,70 @@ void SD_init(void)  {
         
     #endif
 
+}
+
+void checkFileStructure(void) {
+  // Expected filesystem
+  // Check file structure is in place - create if not present
+
+  if (!SD.exists("/Sheep")) {
+    // Create directories
+    createDirectorySD("/Sheep");
+    createDirectorySD("/Sheep/sessions");
+    createDirectorySD("/Sheep/backup");
+    // Create files
+  }
+  // Add cattle etc here
+}
+
+void createDirectorySD(const char* path) {
+  if (!SD.exists(path)) {
+    if (SD.mkdir(path)) {
+      #ifdef OTR_DEBUG
+        Serial.println("createDirectorySD - Directory created successfully.");
+      #endif
+    } else {
+      #ifdef OTR_DEBUG
+        Serial.println("createDirectorySD - Failed to create directory.");
+      #endif
+    }
+  } else {
+    #ifdef OTR_DEBUG
+        Serial.println("createDirectorySD - Directory already exists.");
+    #endif
+  }
+}
+
+void createFileSD(const char* path) {
+  File file = SD.open(path, FILE_WRITE);
+  if (file) {
+    #ifdef OTR_DEBUG
+        Serial.println("createFileSD - File created successfully.");
+    #endif
+    file.close();
+  } else {
+    #ifdef OTR_DEBUG
+        Serial.println("createFileSD - Failed to create file.");
+    #endif
+  }
+}
+
+void deleteFileSD(const char* path) {
+  if (SD.exists(path)) {
+    if (SD.remove(path)) {
+        #ifdef OTR_DEBUG
+            Serial.println("deleteFileSD - File deleted successfully.");
+        #endif
+    } else {
+        #ifdef OTR_DEBUG
+            Serial.println("deleteFileSD - Failed to delete file.");
+        #endif
+    }
+  } else {
+        #ifdef OTR_DEBUG
+            Serial.println("deleteFileSD - File does not exist.");
+        #endif
+  }
 }
 
 void copyFileFromLittleFStoSD(const char* sourcePath, const char* destinationDirectory, const char* destinationFilename) {

@@ -33,7 +33,7 @@ void getNow(int &hour, int &minute, bool &ampm, int &day, int &month, int &year)
 void setTimeManual(void);
 void setDateManual(void);
 void setDateTimeManual(int hour, int minute, bool ampm, int day, int month, int year);
-void getSessionDate(String dateStr);
+String getSessionDate();
 
 // void set_RTC(int year, int month, int date,
 //                   int hour, int minute, int second);

@@ -42,7 +42,7 @@ void duplicateScan(void);
 void displayFileSystemContents(void) ;
 void displayStorageInfo(void);
 void populateSessionList(void);
-
+void newSession(void);
 
 
 #endif

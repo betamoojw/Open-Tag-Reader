@@ -62,3 +62,11 @@ def settingsScreenLoaded(event_struct):
 def counterClicked(event_struct):
     return
 
+
+def sessionScreenLoaded(event_struct):
+    return
+
+
+def newSessionButtonPressed(event_struct):
+    return
+
