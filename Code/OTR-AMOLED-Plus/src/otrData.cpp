@@ -700,11 +700,11 @@ void RECORDS::addNew(Records newRecord) {
 void RECORDS::createSession() {
     //session name is current date with sequential number yymmdd_1, yymmdd_2 etc
     //in order to continue a session after power down etc last 5 sessions stored in last_sessions.txt
-    String dateStr;
-    getSessionDate(dateStr);
+    String dateStr = getSessionDate();
+    Species species = Sheep;
     readLastSessions();
     #ifdef OTR_DEBUG
-        Serial.println(dateStr);
+        Serial.print("RECORDS::createSession - " + dateStr);
         Serial.println(lastSessions[4].substring(0, 6));
     #endif
     if(lastSessions[4].substring(0, 6) == dateStr) {
@@ -718,13 +718,14 @@ void RECORDS::createSession() {
         newSessions[i-1] = lastSessions[i];
     }
     newSessions[4] = session;
-    if (!SD.remove(lastSessionFilePath)) {
+    sessionFilePath = lastSessionFilePath;
+    if (!SD.remove(sessionFilePath)) {
         #ifdef OTR_DEBUG
             Serial.println("RECORDS:createSession-Failed to remove last sessions file");
         #endif
         return;
     }
-    File file = SD.open(lastSessionFilePath, "w");
+    File file = SD.open(sessionFilePath, "w");
      if (!file) {
         #ifdef OTR_DEBUG
             Serial.println("RECORDS:createSession-Failed to create last sessions file");
@@ -792,6 +793,9 @@ String RECORDS::readLastSessions() {
             Serial.println("RECORDS:readLastSessions-No sessions listed");
         #endif
     }
+    #ifdef OTR_DEBUG
+        Serial.println("RECORDS:readLastSessions - " + sessionsDropdown);
+    #endif
     return sessionsDropdown;
     
 }

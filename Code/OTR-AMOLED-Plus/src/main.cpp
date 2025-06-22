@@ -110,9 +110,8 @@ void setup()
 
     //TESTING
     // buzzer.successTone();
-    //playClickGoesTheShears(16);
-    //Serial.println("\n" + listSDCardContents());
-    //Serial.println("\n" + listLittleFSContents());
+    deleteFileSD("/Sheep/sessions/_1.csv");
+
     
     
 

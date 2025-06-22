@@ -100,17 +100,17 @@ void getNow(int &hour, int &minute, bool &ampm, int &day, int &month, int &year)
     year = timeinfo.tm_year + 1900; // 4-digit year
 }
 
-void getSessionDate(String dateStr) {
+String getSessionDate() {
     struct tm timeinfo;
     time_t now;
     time(&now);
     localtime_r(&now, &timeinfo);
-    char tmpStr[7];
-    strftime(tmpStr, 7, "%y%m%d", &timeinfo);
+    char tmpStr[8];
+    strftime(tmpStr, 8, "%y%m%d", &timeinfo);
     #ifdef OTR_DEBUG
         Serial.println(tmpStr);
     #endif
-    dateStr = String(tmpStr);
+    return String(tmpStr);
     
 }
 

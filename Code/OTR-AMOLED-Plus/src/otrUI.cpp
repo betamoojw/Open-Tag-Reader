@@ -380,5 +380,35 @@ void displayStorageInfo(void)   {
 }
 void populateSessionList(void)  {
     String sessionList = records.readLastSessions();
-    lv_roller_set_options(ui_Session_Roller1, sessionList.c_str(), LV_ROLLER_MODE_INFINITE);
+    int index = sessionList.indexOf("\r");
+    while (index != -1)   {
+        sessionList.remove(index, 1);
+        index = sessionList.indexOf("\r");
+    }
+    
+    //sessionList = "250621_7\n250621_8\n250621_9\n250621_10\n250621_11";
+    const char * options = sessionList.c_str();
+    lv_roller_set_options(ui_Session_Roller1, options, LV_ROLLER_MODE_NORMAL);
+    lv_roller_set_selected(ui_Session_Roller1, 5, LV_ANIM_ON);
+    #ifdef OTR_DEBUG
+        Serial.println("populateSessionList - ");
+        Serial.println("sessionList");
+        for (int i = 0; i < sessionList.length(); i++)   {
+            Serial.print(sessionList[i], HEX);
+            Serial.print(" ");
+        }
+        Serial.println("\noptions");
+        for (int i = 0; i < strlen(options); i++)   {
+            Serial.print(options[i], HEX);
+            Serial.print(" ");
+        }
+        Serial.println();
+
+    #endif
+    lv_refr_now(lv_disp_get_default());
+}
+void newSession(void)   {
+    records.createSession();
+    records.readLastSessions();
+    _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
 }

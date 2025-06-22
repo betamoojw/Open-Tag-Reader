@@ -15,6 +15,10 @@
 
 void initFileSystem(void);
 void SD_init(void);
+void checkFileStructure(void);
+void createDirectorySD(const char* path);
+void createFileSD(const char* path);
+void deleteFileSD(const char* path);
 void copyFileFromLittleFStoSD(const char* sourcePath, const char* destinationDirectory, 
                                 const char* destinationFilename);
 void moveFileFromLittleFStoSD(const char* sourcePath, const char* destinationDirectory, 

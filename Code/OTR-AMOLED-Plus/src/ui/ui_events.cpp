@@ -53,7 +53,17 @@ void settingsScreenLoaded(lv_event_t * e)
 	displayStorageInfo();
 }
 
+void counterClicked(lv_event_t * e)
+{
+	// Your code here
+}
+
 void sessionScreenLoaded(lv_event_t * e)
 {
 	populateSessionList();
+}
+
+void newSessionButtonPressed(lv_event_t * e)
+{
+	newSession();
 }
