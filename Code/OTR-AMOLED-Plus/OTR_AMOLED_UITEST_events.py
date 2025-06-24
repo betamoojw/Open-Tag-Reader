@@ -70,3 +70,11 @@ def sessionScreenLoaded(event_struct):
 def newSessionButtonPressed(event_struct):
     return
 
+
+def continueSessionButtonPressed(event_struct):
+    return
+
+
+def endSessionButtonPressed(event_struct):
+    return
+

@@ -19,6 +19,8 @@ void setTimeManual(lv_event_t * e);
 void roller_update(lv_event_t * e);
 void sessionScreenLoaded(lv_event_t * e);
 void newSessionButtonPressed(lv_event_t * e);
+void continueSessionButtonPressed(lv_event_t * e);
+void endSessionButtonPressed(lv_event_t * e);
 void settingsScreenLoaded(lv_event_t * e);
 
 #ifdef __cplusplus
