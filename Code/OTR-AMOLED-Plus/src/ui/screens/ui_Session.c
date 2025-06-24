@@ -43,18 +43,42 @@ void ui_Session_screen_init(void)
     lv_obj_set_style_text_font(ui_SessionContinueButton_Label, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Session_Roller1 = lv_roller_create(ui_Session);
-    lv_roller_set_options(ui_Session_Roller1, "Option 1\nOption 2\nOption 3", LV_ROLLER_MODE_NORMAL);
+    lv_roller_set_options(ui_Session_Roller1, "Option 1\nOption 2\nOption 3\nOpt4\nOpt5", LV_ROLLER_MODE_NORMAL);
+    lv_roller_set_selected(ui_Session_Roller1, 2, LV_ANIM_OFF);
     lv_obj_set_width(ui_Session_Roller1, lv_pct(95));
-    lv_obj_set_height(ui_Session_Roller1, lv_pct(50));
+    lv_obj_set_height(ui_Session_Roller1, lv_pct(40));
     lv_obj_set_x(ui_Session_Roller1, lv_pct(0));
-    lv_obj_set_y(ui_Session_Roller1, lv_pct(20));
+    lv_obj_set_y(ui_Session_Roller1, lv_pct(10));
     lv_obj_set_align(ui_Session_Roller1, LV_ALIGN_CENTER);
-    lv_obj_set_style_text_font(ui_Session_Roller1, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Session_Roller1, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_Session_Roller1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Session_Roller1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_color(ui_Session_Roller1, lv_color_hex(0xCCCACA), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_main_stop(ui_Session_Roller1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_stop(ui_Session_Roller1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_dir(ui_Session_Roller1, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_set_style_text_font(ui_Session_Roller1, &lv_font_montserrat_40, LV_PART_SELECTED | LV_STATE_DEFAULT);
 
+    ui_Session_EndButton = lv_btn_create(ui_Session);
+    lv_obj_set_width(ui_Session_EndButton, lv_pct(90));
+    lv_obj_set_height(ui_Session_EndButton, lv_pct(15));
+    lv_obj_set_x(ui_Session_EndButton, lv_pct(0));
+    lv_obj_set_y(ui_Session_EndButton, lv_pct(40));
+    lv_obj_set_align(ui_Session_EndButton, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Session_EndButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_Session_EndButton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_SessionEndButton_Label = lv_label_create(ui_Session_EndButton);
+    lv_obj_set_width(ui_SessionEndButton_Label, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_SessionEndButton_Label, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_SessionEndButton_Label, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_SessionEndButton_Label, "END");
+    lv_obj_set_style_text_font(ui_SessionEndButton_Label, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_obj_add_event_cb(ui_Session_NewButton, ui_event_Session_NewButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Session_ContinueButton, ui_event_Session_ContinueButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Session_EndButton, ui_event_Session_EndButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Session, ui_event_Session, LV_EVENT_ALL, NULL);
 
 }

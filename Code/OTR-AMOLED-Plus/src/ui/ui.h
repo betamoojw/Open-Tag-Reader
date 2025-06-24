@@ -89,6 +89,9 @@ void ui_event_Session_ContinueButton(lv_event_t * e);
 extern lv_obj_t * ui_Session_ContinueButton;
 extern lv_obj_t * ui_SessionContinueButton_Label;
 extern lv_obj_t * ui_Session_Roller1;
+void ui_event_Session_EndButton(lv_event_t * e);
+extern lv_obj_t * ui_Session_EndButton;
+extern lv_obj_t * ui_SessionEndButton_Label;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Tagging

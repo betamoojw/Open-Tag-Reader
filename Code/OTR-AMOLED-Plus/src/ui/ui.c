@@ -81,6 +81,9 @@ void ui_event_Session_ContinueButton(lv_event_t * e);
 lv_obj_t * ui_Session_ContinueButton;
 lv_obj_t * ui_SessionContinueButton_Label;
 lv_obj_t * ui_Session_Roller1;
+void ui_event_Session_EndButton(lv_event_t * e);
+lv_obj_t * ui_Session_EndButton;
+lv_obj_t * ui_SessionEndButton_Label;
 // CUSTOM VARIABLES
 
 // SCREEN: ui_Tagging
@@ -285,6 +288,15 @@ void ui_event_Session_ContinueButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         continueSessionButtonPressed(e);
+    }
+}
+
+void ui_event_Session_EndButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        endSessionButtonPressed(e);
     }
 }
 
