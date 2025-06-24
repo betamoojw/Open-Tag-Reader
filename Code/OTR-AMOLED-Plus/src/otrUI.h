@@ -43,6 +43,7 @@ void displayFileSystemContents(void) ;
 void displayStorageInfo(void);
 void populateSessionList(void);
 void newSession(void);
+void continueSession(void);
 
 
 #endif

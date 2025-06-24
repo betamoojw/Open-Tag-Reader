@@ -411,4 +411,14 @@ void newSession(void)   {
     records.createSession();
     records.readLastSessions();
     _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
+    lv_label_set_text(ui_Main_Label_Session, records.session.c_str());
+}
+
+void continueSession(void)  {
+    char buf[20];
+    lv_roller_get_selected_str(ui_Session_Roller1, buf, 20);
+    records.session = String(buf);
+    _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
+    lv_label_set_text(ui_Main_Label_Session, records.session.c_str());
+    
 }

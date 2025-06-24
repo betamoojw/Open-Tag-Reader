@@ -77,6 +77,7 @@ lv_obj_t * ui_Session;
 void ui_event_Session_NewButton(lv_event_t * e);
 lv_obj_t * ui_Session_NewButton;
 lv_obj_t * ui_SessionNewButton_Label;
+void ui_event_Session_ContinueButton(lv_event_t * e);
 lv_obj_t * ui_Session_ContinueButton;
 lv_obj_t * ui_SessionContinueButton_Label;
 lv_obj_t * ui_Session_Roller1;
@@ -275,6 +276,15 @@ void ui_event_Session_NewButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         newSessionButtonPressed(e);
+    }
+}
+
+void ui_event_Session_ContinueButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        continueSessionButtonPressed(e);
     }
 }
 

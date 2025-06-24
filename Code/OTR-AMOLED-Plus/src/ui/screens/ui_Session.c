@@ -54,6 +54,7 @@ void ui_Session_screen_init(void)
     lv_obj_set_style_text_font(ui_Session_Roller1, &lv_font_montserrat_40, LV_PART_SELECTED | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Session_NewButton, ui_event_Session_NewButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Session_ContinueButton, ui_event_Session_ContinueButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Session, ui_event_Session, LV_EVENT_ALL, NULL);
 
 }
