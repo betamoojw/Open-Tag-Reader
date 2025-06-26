@@ -75,5 +75,5 @@ void continueSessionButtonPressed(lv_event_t * e)
 
 void endSessionButtonPressed(lv_event_t * e)
 {
-	// Your code here
+	endSession();
 }

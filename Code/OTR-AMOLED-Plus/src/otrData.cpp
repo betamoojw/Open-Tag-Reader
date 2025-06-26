@@ -639,13 +639,23 @@ void RECORDS::readFile() {
     recordsFile.close();
 }
 
-void RECORDS::count() {
-    recordsFile = SD.open(recordsFilePath, "r");
-    recordsFile.seek(0, SeekEnd);
-    recordsFile.seek(recordsFile.position() - 1);
-    totalRecords = recordsFile.readStringUntil(',').toInt();
-    recordsFile.close();
-    recordsCounted = true;
+int RECORDS::count(const String& filePath) {
+    File file = SD.open(filePath, "r");
+    if (!file) {
+        #ifdef OTR_DEBUG
+            Serial.println("RECORDS::count-Failed to open file-Returning zero");
+        #endif
+        return 0;
+    }
+    file.seek(0, SeekEnd);
+    file.seek(file.position() - 1);
+    int recordCount = file.readStringUntil(',').toInt();
+    file.close();
+    #ifdef OTR_DEBUG
+        Serial.print("RECORDS::count-File: "); Serial.println(filePath);
+        Serial.print("RECORDS::count-Record count: "); Serial.println(recordCount);
+    #endif
+    return recordCount;
 }
 //UNFINISHED
 void RECORDS::create() {
@@ -660,7 +670,8 @@ void RECORDS::addNew(Records newRecord) {
     }
     recordsFile.seek(0, SeekEnd); //go to end of file
     if (!recordsCounted) {//count function must be run prior
-        count();
+        numRecords = count(recordsFilePath);
+        recordsCounted = true;
     }
     File sessionFile = SD.open(sessionFilePath, "w");
     if (!sessionFile) {
@@ -749,10 +760,15 @@ void RECORDS::createSession() {
     sessionFile.println(recordsHeader);
     recordsFilePath = sessionFilePath;
     numRecords = 0;
+    numRecordsInSession = 0;
     recordsCounted = true;
     sessionFile.close();
 }
 
+void RECORDS::deleteSession() {
+    String path = "/" + speciesStrings[species] + "/sessions/" + session + ".csv";
+    deleteFileSD(path.c_str());
+}
 String RECORDS::readLastSessions() {
     
     lastSessionFilePath = "/" + speciesStrings[species] + "/sessions/last_sessions.txt";

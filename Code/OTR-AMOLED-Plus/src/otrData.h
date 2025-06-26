@@ -167,13 +167,14 @@ class RECORDS {
         String session;
         String lastSessions[5];
         String lastSessionFilePath = "/sessions/last_sessions.txt";
-        String sessionFilePath = "session/yymmdd_1.csv";
+        String sessionFilePath = "sessions/yymmdd_1.csv";
         String recordsHeader = "Index,Session,RFID,Timestamp,Location,Status,Group,Weight,Trait,Treat,Comment/n";
         void readFile();
-        void count();
+        int count(const String& filePath);
         void create();
         void addNew(Records);
         void createSession();
+        void deleteSession();
         String readLastSessions();
         Records* find(String& rfid, int& num);
         int numRecordsInSession;

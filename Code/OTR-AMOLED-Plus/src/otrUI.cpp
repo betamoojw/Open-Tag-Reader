@@ -417,8 +417,8 @@ void newSession(void)   {
 void continueSession(void)  {
     char buf[20];
     lv_roller_get_selected_str(ui_Session_Roller1, buf, 20);
-    if(String(buf) != records.session)   {  // Changed - CHack old sessiion isn't empty, i.e. new session created but not used
-        
+    if(String(buf) != records.session)   {  // Changed - CHack old sessiion isn't empty
+
     }
     records.session = String(buf);
     _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
@@ -427,6 +427,13 @@ void continueSession(void)  {
 }
 
 void endSession(void)   {
+    if (records.numRecordsInSession == 0) {
+        //discard empty sessions
+        
+
+    }
+    
+     
     records.session = "";
     _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
     lv_label_set_text(ui_Main_Label_Session, "Swipe right for sessions...");
