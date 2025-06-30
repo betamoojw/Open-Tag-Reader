@@ -285,7 +285,7 @@ void RFIDReader::updateScanIcon() {
 
 String RFIDReader::scan() {
     
-    String scanResult = rfidreader.monitorSerial();
+    scanResult = rfidreader.monitorSerial();
     if (scanResult != "") {
         if (validateRFID(scanResult.c_str())) {
             #ifdef OTR_DEBUG
@@ -293,6 +293,7 @@ String RFIDReader::scan() {
                 Serial.println(scanResult);
             #endif
             successfulScan(scanResult);
+            
             return scanResult;
         } else {
             if (scanError == "Duplicate")   {

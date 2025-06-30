@@ -113,6 +113,32 @@ lv_obj_t * ui_Settings_TabPageStorage;
 lv_obj_t * ui_Settings_TextAreaStorage;
 // CUSTOM VARIABLES
 
+// SCREEN: ui_Records
+void ui_Records_screen_init(void);
+void ui_event_Records(lv_event_t * e);
+lv_obj_t * ui_Records;
+lv_obj_t * ui_Records_TabView1;
+lv_obj_t * ui_Records_TabRecord;
+lv_obj_t * ui_Record_DropdownType;
+lv_obj_t * ui_Record_DropdownGroup;
+lv_obj_t * ui_Record_DropdownStatus;
+lv_obj_t * ui_Record_DropdownLocation;
+lv_obj_t * ui_Record_LabelGender;
+lv_obj_t * ui_Record_LabelWeight;
+lv_obj_t * ui_Records_TabTag;
+lv_obj_t * ui_Tag_DropdownStatus;
+lv_obj_t * ui_Records_Label3;
+lv_obj_t * ui_Records_Label_RFID;
+lv_obj_t * ui_Records_Label1;
+lv_obj_t * ui_Records_Label_PIC;
+lv_obj_t * ui_Records_Label2;
+lv_obj_t * ui_Records_Label_NLISID;
+lv_obj_t * ui_Records_Label4;
+lv_obj_t * ui_Records_Label_Colour;
+lv_obj_t * ui_Records_Label5;
+lv_obj_t * ui_Records_Label_VisualID;
+// CUSTOM VARIABLES
+
 // EVENTS
 lv_obj_t * ui____initial_actions0;
 
@@ -139,6 +165,10 @@ void ui_event_Main(lv_event_t * e)
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_Session, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_Session_screen_init);
+    }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Records, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_Records_screen_init);
     }
 }
 
@@ -309,6 +339,19 @@ void ui_event_Settings(lv_event_t * e)
     }
 }
 
+void ui_event_Records(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_Main_screen_init);
+    }
+    if(event_code == LV_EVENT_SCREEN_LOADED) {
+        populateRecordsDropdowns(e);
+    }
+}
+
 ///////////////////// SCREENS ////////////////////
 
 void ui_init(void)
@@ -323,6 +366,7 @@ void ui_init(void)
     ui_Session_screen_init();
     ui_Tagging_screen_init();
     ui_Settings_screen_init();
+    ui_Records_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Main);
 }
