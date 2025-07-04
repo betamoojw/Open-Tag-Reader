@@ -46,7 +46,8 @@ String RFIDReader::monitorSerial(void) {
             if (Serial1.available()) {
                 readRFID = Serial1.readString(); //read until timeout
                 readRFID.replace('_', ' ');
-                readRFID.toCharArray(RFID, 17);
+                readRFID.trim();
+                readRFID.toCharArray(RFID, 16);
                 Serial.println(RFID);
             }
         } else {
@@ -54,7 +55,8 @@ String RFIDReader::monitorSerial(void) {
                 if(Serial.peek() == startByte) {
                     readRFID = Serial.readString(); //read until timeout
                     readRFID.replace('_', ' ');
-                    readRFID.toCharArray(RFID, 17);
+                    readRFID,trim();
+                    readRFID.toCharArray(RFID, 16);
                     #ifdef OTR_DEBUG
                         Serial.print("RFIDREADER:monitorSerial - Serial Received ");
                         Serial.println(RFID);
@@ -76,8 +78,8 @@ bool RFIDReader::validateRFID(const char* RFID) {
     // 4th character is a space
     scanError = "";
 
-    if (strlen(RFID) != 17) { 
-        if (strlen(RFID)>17) {
+    if (strlen(RFID) != 16) { 
+        if (strlen(RFID)>16) {
             scanError = "Too long";
         } else {
             scanError = "Too short";

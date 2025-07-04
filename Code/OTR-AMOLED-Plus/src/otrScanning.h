@@ -30,7 +30,7 @@ public:
         uint64_t tagID;
         uint16_t countryID;
         bool isAnimal;
-        char rfidID[17];
+        char rfidID[16];
     };
     void readPacket();
     rfidRead getReading() const;
