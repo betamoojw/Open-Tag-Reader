@@ -121,6 +121,32 @@ extern lv_obj_t * ui_Settings_TabPageStorage;
 extern lv_obj_t * ui_Settings_TextAreaStorage;
 // CUSTOM VARIABLES
 
+// SCREEN: ui_Records
+void ui_Records_screen_init(void);
+void ui_event_Records(lv_event_t * e);
+extern lv_obj_t * ui_Records;
+extern lv_obj_t * ui_Records_TabView1;
+extern lv_obj_t * ui_Records_TabRecord;
+extern lv_obj_t * ui_Record_DropdownType;
+extern lv_obj_t * ui_Record_DropdownGroup;
+extern lv_obj_t * ui_Record_DropdownStatus;
+extern lv_obj_t * ui_Record_DropdownLocation;
+extern lv_obj_t * ui_Record_LabelGender;
+extern lv_obj_t * ui_Record_LabelWeight;
+extern lv_obj_t * ui_Records_TabTag;
+extern lv_obj_t * ui_Tag_DropdownStatus;
+extern lv_obj_t * ui_Records_Label3;
+extern lv_obj_t * ui_Records_Label_RFID;
+extern lv_obj_t * ui_Records_Label1;
+extern lv_obj_t * ui_Records_Label_PIC;
+extern lv_obj_t * ui_Records_Label2;
+extern lv_obj_t * ui_Records_Label_NLISID;
+extern lv_obj_t * ui_Records_Label4;
+extern lv_obj_t * ui_Records_Label_Colour;
+extern lv_obj_t * ui_Records_Label5;
+extern lv_obj_t * ui_Records_Label_VisualID;
+// CUSTOM VARIABLES
+
 // EVENTS
 
 extern lv_obj_t * ui____initial_actions0;

@@ -12,6 +12,9 @@ extern LED led;
 extern VIBRATE vibrate;
 extern BUZZER buzzer;
 extern RECORDS records;
+extern TAGS tags;
+extern ANIMALS animals;
+extern Species species;
 
 static uint8_t lastBri =0;
 
@@ -417,8 +420,10 @@ void newSession(void)   {
 void continueSession(void)  {
     char buf[20];
     lv_roller_get_selected_str(ui_Session_Roller1, buf, 20);
-    if(String(buf) != records.session)   {  // Changed - CHack old sessiion isn't empty, i.e. new session created but not used
-        
+    if(String(buf) != records.session)   {  // Changed - CHack old sessiion isn't empty
+        if(records.numRecordsInSession == 0)    {
+            records.deleteSession();
+        }
     }
     records.session = String(buf);
     _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
@@ -427,7 +432,40 @@ void continueSession(void)  {
 }
 
 void endSession(void)   {
+    if (records.numRecordsInSession == 0) {
+        //discard empty sessions
+        records.deleteSession();
+
+    }
+    
+     
     records.session = "";
     _ui_screen_change(&ui_Main, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_Main_screen_init);
     lv_label_set_text(ui_Main_Label_Session, "Swipe right for sessions...");
+}
+
+void populateRecordsScreenDropdowns(void)   {
+    // Records Tab - Status, Type, Group, Location
+    lv_dropdown_set_options(ui_Record_DropdownStatus, "Alive\nDead\nSold");
+    String filePath = "/" + speciesStrings[species] + "/" + animals.typesFilePath;
+    String optionsStr = animals.readOptions(filePath);
+    const char * options;
+    if (!optionsStr.isEmpty())  {
+        options = optionsStr.c_str();
+        
+    }   else    {
+        options = animals.typesOptions.c_str();
+    }
+    lv_dropdown_set_options(ui_Record_DropdownType, options);
+    filePath = "/" + speciesStrings[species] + "/" + animals.groupsFilePath;
+    optionsStr = animals.readOptions(filePath);
+    if (!optionsStr.isEmpty())  {
+        options = optionsStr.c_str();
+        
+    }   else    {
+        options = animals.groupsOptions.c_str();
+    }
+    lv_dropdown_set_options(ui_Record_DropdownGroup, options);
+    
+
 }

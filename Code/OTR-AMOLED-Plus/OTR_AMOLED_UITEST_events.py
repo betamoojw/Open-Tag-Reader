@@ -78,3 +78,7 @@ def continueSessionButtonPressed(event_struct):
 def endSessionButtonPressed(event_struct):
     return
 
+
+def populateRecordsDropdowns(event_struct):
+    return
+

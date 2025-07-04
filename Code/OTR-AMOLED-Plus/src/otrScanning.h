@@ -69,6 +69,7 @@ class RFIDReader {
 
         };
         String scanError;
+        String scanResult;
         
         bool readerStatus = 0;
         void begin(void);

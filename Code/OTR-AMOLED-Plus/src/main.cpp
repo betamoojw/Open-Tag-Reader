@@ -32,6 +32,9 @@ LED led;
 VIBRATE vibrate;
 BUZZER buzzer;
 RECORDS records;
+TAGS tags;
+ANIMALS animals;
+
 
 //CONFIG #################################
 bool readerBoard =0;  // 0 for Priority 1 (ASCII Output), 1 for WL134A
@@ -87,7 +90,7 @@ void setup()
 
     //Filesystem Init
     initFileSystem();
-
+    tags.readTagsActive();
     
 
     
@@ -130,6 +133,27 @@ void loop()
                                     // if valid scan
         //Serial.println(rfidreader.scan());
         timeStampSystem();
+        //check tag is active
+        Serial.println("Scan result" + rfidreader.scanResult);
+        if(tags.isTagActive(rfidreader.scanResult))     {
+            // tag Active - find associated records
+            TAGS::Tags tagDetails = tags.getActiveTagDetails(rfidreader.scanResult);
+            
+        } else {
+            // check tag is known
+            if(tags.isTagKnown(rfidreader.scanResult)) {
+                // tag known -get tag details
+                TAGS::Tags tagDetails = tags.getTagDetails(rfidreader.scanResult);
+                if(tagDetails.Status == "Unused") {
+                    // Activate tag
+                } else if(tagDetails.Status == "Inactive") {
+                    // Tag either belongs to Dead or Sold animal
+                }
+
+            } else {
+                // tag not known - Activate Tag
+            }
+        }
 
     }
     

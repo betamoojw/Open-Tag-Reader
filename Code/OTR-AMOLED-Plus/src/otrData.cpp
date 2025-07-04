@@ -230,6 +230,16 @@ bool TAGS::isTagActive(String RFID) {
     return false;
 }
 
+TAGS::Tags TAGS::getActiveTagDetails(String RFID) {
+  for (int i = 0; i < numActiveTags; i++) {
+    if (activeTags[i].RFID == RFID) {
+      return activeTags[i];
+    }
+  }
+  // Return an empty tag if not found
+  return TAGS::Tags();
+}
+
 bool TAGS::isTagKnown(String RFID) {
     tags = SD.open(tagsFilePath);
     String line;
@@ -357,6 +367,41 @@ void printTraits() {
 ANIMALS::ANIMALS()  {
     numAnimals = 0;
     totalAnimals = 0;
+}
+String ANIMALS::readOptions(String filePath) {
+    File optionsFile = SD.open(filePath, "r");
+    if (!optionsFile) {
+        #ifdef OTR_DEBUG
+            Serial.print("ANIMALS::readOptions-Failed to open file: ");
+            Serial.println(filePath);
+        #endif
+        return "";
+    }
+    String optionsString = "";
+    while (optionsFile.available()) {
+        String line = optionsFile.readStringUntil('\n');
+        optionsString += line + '\n';
+    }
+    optionsString = optionsString.substring(0, optionsString.length() - 1);
+    optionsFile.close();
+    if (optionsString.isEmpty()) {
+        #ifdef OTR_DEBUG
+            Serial.print("ANIMALS::readOptions- file is empty: ");
+            Serial.println(filePath);
+        #endif
+        return "";
+    }
+    int index = optionsString.indexOf("\r");
+    while (index != -1)   {
+        optionsString.remove(index, 1);
+        index = optionsString.indexOf("\r");
+    }
+    
+    #ifdef OTR_DEBUG
+        Serial.print("ANIMALS::readOptions-Options: ");
+        Serial.println(optionsString);
+    #endif
+    return optionsString;
 }
     
 void ANIMALS::readFile() {
@@ -639,13 +684,23 @@ void RECORDS::readFile() {
     recordsFile.close();
 }
 
-void RECORDS::count() {
-    recordsFile = SD.open(recordsFilePath, "r");
-    recordsFile.seek(0, SeekEnd);
-    recordsFile.seek(recordsFile.position() - 1);
-    totalRecords = recordsFile.readStringUntil(',').toInt();
-    recordsFile.close();
-    recordsCounted = true;
+int RECORDS::count(const String& filePath) {
+    File file = SD.open(filePath, "r");
+    if (!file) {
+        #ifdef OTR_DEBUG
+            Serial.println("RECORDS::count-Failed to open file-Returning zero");
+        #endif
+        return 0;
+    }
+    file.seek(0, SeekEnd);
+    file.seek(file.position() - 1);
+    int recordCount = file.readStringUntil(',').toInt();
+    file.close();
+    #ifdef OTR_DEBUG
+        Serial.print("RECORDS::count-File: "); Serial.println(filePath);
+        Serial.print("RECORDS::count-Record count: "); Serial.println(recordCount);
+    #endif
+    return recordCount;
 }
 //UNFINISHED
 void RECORDS::create() {
@@ -660,7 +715,8 @@ void RECORDS::addNew(Records newRecord) {
     }
     recordsFile.seek(0, SeekEnd); //go to end of file
     if (!recordsCounted) {//count function must be run prior
-        count();
+        numRecords = count(recordsFilePath);
+        recordsCounted = true;
     }
     File sessionFile = SD.open(sessionFilePath, "w");
     if (!sessionFile) {
@@ -677,29 +733,37 @@ void RECORDS::addNew(Records newRecord) {
     recordsFile.print(newRecord.timeStamp + ",");
     recordsFile.print(newRecord.location + ",");
     recordsFile.print(newRecord.status + ",");
+    recordsFile.print(newRecord.type + ",");
     recordsFile.print(newRecord.group + ",");
     recordsFile.print(newRecord.weight + ","); //placeholder for weight
     recordsFile.print(newRecord.trait + ",");
     recordsFile.print(newRecord.treat + ",");
     recordsFile.println(newRecord.comment);
     recordsFile.close();
-    sessionFile.print(numRecordsInSession);
-    sessionFile.print(",") + newRecord.session + ",";
-    sessionFile.print(newRecord.rfid + ",");
-    sessionFile.print(newRecord.timeStamp + ",");
-    sessionFile.print(newRecord.location + ",");
-    sessionFile.print(newRecord.status + ",");
-    sessionFile.print(newRecord.group + ",");
-    sessionFile.print(newRecord.weight + ","); //placeholder for weight
-    sessionFile.print(newRecord.trait + ",");
-    sessionFile.print(newRecord.treat + ",");
-    sessionFile.println(newRecord.comment);
-    sessionFile.close();
+    if (newRecord.session != "NONE") {
+        sessionFile.print(numRecordsInSession);
+        sessionFile.print(",") + newRecord.session + ",";
+        sessionFile.print(newRecord.rfid + ",");
+        sessionFile.print(newRecord.timeStamp + ",");
+        sessionFile.print(newRecord.location + ",");
+        sessionFile.print(newRecord.status + ",");
+        recordsFile.print(newRecord.type + ",");
+        sessionFile.print(newRecord.group + ",");
+        sessionFile.print(newRecord.weight + ","); //placeholder for weight
+        sessionFile.print(newRecord.trait + ",");
+        sessionFile.print(newRecord.treat + ",");
+        sessionFile.println(newRecord.comment);
+        sessionFile.close();
+    }
 }
 
 void RECORDS::createSession() {
     //session name is current date with sequential number yymmdd_1, yymmdd_2 etc
     //in order to continue a session after power down etc last 5 sessions stored in last_sessions.txt
+    if (numRecordsInSession == 0) {
+        //delete empty session
+        records.deleteSession();
+    }
     String dateStr = getSessionDate();
     Species species = Sheep;
     readLastSessions();
@@ -749,10 +813,15 @@ void RECORDS::createSession() {
     sessionFile.println(recordsHeader);
     recordsFilePath = sessionFilePath;
     numRecords = 0;
+    numRecordsInSession = 0;
     recordsCounted = true;
     sessionFile.close();
 }
 
+void RECORDS::deleteSession() {
+    String path = "/" + speciesStrings[species] + "/sessions/" + session + ".csv";
+    deleteFileSD(path.c_str());
+}
 String RECORDS::readLastSessions() {
     
     lastSessionFilePath = "/" + speciesStrings[species] + "/sessions/last_sessions.txt";
@@ -899,8 +968,6 @@ void TREATMENTS::loadProducts() {
      
     productsFile.close();
 }
-
-
 
 void TREATMENTS::addProduct(String productRow) {
     Species species = Sheep;

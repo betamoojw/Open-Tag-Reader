@@ -44,6 +44,6 @@ void displayStorageInfo(void);
 void populateSessionList(void);
 void newSession(void);
 void continueSession(void);
-
+void endSession(void);
 
 #endif

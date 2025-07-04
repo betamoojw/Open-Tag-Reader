@@ -135,7 +135,9 @@ void ui_Main_screen_init(void)
     lv_obj_set_x(ui_Main_Label_Location, lv_pct(0));
     lv_obj_set_y(ui_Main_Label_Location, lv_pct(-10));
     lv_obj_set_align(ui_Main_Label_Location, LV_ALIGN_CENTER);
+    lv_label_set_long_mode(ui_Main_Label_Location, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(ui_Main_Label_Location, "Location");
+    lv_label_set_recolor(ui_Main_Label_Location, "true");
     lv_obj_set_style_text_font(ui_Main_Label_Location, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Main_Label_VisualID = lv_label_create(ui_Main);

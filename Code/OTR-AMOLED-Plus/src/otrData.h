@@ -40,6 +40,7 @@ class TAGS {
         void readTagsFile();
         void readTagsActive();
         bool isTagActive(String RFID);
+        Tags getActiveTagDetails(String RFID);
         bool isTagKnown(String RFID);
         Tags getTagDetails(String RFID);
         //char feedRowParser();
@@ -105,11 +106,17 @@ class ANIMALS {
         String animalArchiveFilePath = "/archive/aminals_archive.csv";
         String animalFilePathTemp = "/backup/animals.tmp";
         String dogsFilePath = "/dogs.csv";
+        String typesFilePath = "/types.csv";
+        String groupsFilePath = "/groups.csv";
+        String typesOptions = "Stud\nCommercial";
+        String groupsOptions = "Ewes\nLambs\nRams";
 
         ANIMALS();
         ~ANIMALS() {
             delete [] animal;
         }
+        String readOptions(String filePath);
+        void readGroups();
         void readFile();
         void readAliveOnly();
         void addNew(AnimalsFile);   
@@ -144,6 +151,7 @@ class RECORDS {
             String timeStamp;
             String location;
             String status;
+            String type;
             String group;
             String weight;
             String trait;  //delinineated list of traits new values eg. Udder/Dry;Feet/Bad,
@@ -156,6 +164,7 @@ class RECORDS {
             String timeStamp;
             String location;
             String status;
+            String type;
             String group;
             String weight;
             String trait;
@@ -167,13 +176,14 @@ class RECORDS {
         String session;
         String lastSessions[5];
         String lastSessionFilePath = "/sessions/last_sessions.txt";
-        String sessionFilePath = "session/yymmdd_1.csv";
+        String sessionFilePath = "sessions/yymmdd_1.csv";
         String recordsHeader = "Index,Session,RFID,Timestamp,Location,Status,Group,Weight,Trait,Treat,Comment/n";
         void readFile();
-        void count();
+        int count(const String& filePath);
         void create();
         void addNew(Records);
         void createSession();
+        void deleteSession();
         String readLastSessions();
         Records* find(String& rfid, int& num);
         int numRecordsInSession;
