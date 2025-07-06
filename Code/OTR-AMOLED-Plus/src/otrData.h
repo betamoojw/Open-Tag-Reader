@@ -80,8 +80,8 @@ class ANIMALS {
             String rfid;    //unique
             String tagged;
             bool gender;    //fixed M/F TRUE == "F"
-            String mother;  //future feature
-            String father;
+            String dam;  //future feature
+            String sire;
             uint8_t multi_birth; //was the animal born as a single twin, etc
             String location;
             String group;
@@ -168,8 +168,8 @@ class ANIMALS {
 
     
     private:
-        AnimalsFile* animal;
-        AnimalsFile* aliveOnly;
+        Animals* animal;
+        Animals* aliveOnly;
         int numAnimals; 
         Species currentSpecies;
 };

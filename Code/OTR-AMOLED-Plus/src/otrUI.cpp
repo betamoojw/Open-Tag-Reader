@@ -14,7 +14,7 @@ extern BUZZER buzzer;
 extern RECORDS records;
 extern TAGS tags;
 extern ANIMALS animals;
-extern Species species;
+
 
 static uint8_t lastBri =0;
 
@@ -447,25 +447,25 @@ void endSession(void)   {
 void populateRecordsScreenDropdowns(void)   {
     // Records Tab - Status, Type, Group, Location
     lv_dropdown_set_options(ui_Record_DropdownStatus, "Alive\nDead\nSold");
-    String filePath = "/" + speciesStrings[species] + "/" + animals.typesFilePath;
-    String optionsStr = animals.readOptions(filePath);
-    const char * options;
-    if (!optionsStr.isEmpty())  {
-        options = optionsStr.c_str();
+    // String filePath = "/" + speciesStrings[species] + "/" + animals.typesFilePath;
+    // String optionsStr = animals.readOptions(filePath);
+    // const char * options;
+    // if (!optionsStr.isEmpty())  {
+    //     options = optionsStr.c_str();
         
-    }   else    {
-        options = animals.typesOptions.c_str();
-    }
-    lv_dropdown_set_options(ui_Record_DropdownType, options);
-    filePath = "/" + speciesStrings[species] + "/" + animals.groupsFilePath;
-    optionsStr = animals.readOptions(filePath);
-    if (!optionsStr.isEmpty())  {
-        options = optionsStr.c_str();
+    // }   else    {
+    //     options = animals.typesOptions.c_str();
+    // }
+    // lv_dropdown_set_options(ui_Record_DropdownType, options);
+    // filePath = "/" + speciesStrings[species] + "/" + animals.groupsFilePath;
+    // optionsStr = animals.readOptions(filePath);
+    // if (!optionsStr.isEmpty())  {
+    //     options = optionsStr.c_str();
         
-    }   else    {
-        options = animals.groupsOptions.c_str();
-    }
-    lv_dropdown_set_options(ui_Record_DropdownGroup, options);
+    // }   else    {
+    //     options = animals.groupsOptions.c_str();
+    // }
+    // lv_dropdown_set_options(ui_Record_DropdownGroup, options);
     
 
 }

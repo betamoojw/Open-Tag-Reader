@@ -55,7 +55,7 @@ String RFIDReader::monitorSerial(void) {
                 if(Serial.peek() == startByte) {
                     readRFID = Serial.readString(); //read until timeout
                     readRFID.replace('_', ' ');
-                    readRFID,trim();
+                    readRFID.trim();
                     readRFID.toCharArray(RFID, 16);
                     #ifdef OTR_DEBUG
                         Serial.print("RFIDREADER:monitorSerial - Serial Received ");

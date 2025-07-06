@@ -5,12 +5,12 @@
 
 
 extern RECORDS records;
-
+extern ANIMALS animals;
 
 
 void TAGS::readTagsFile() {
     //Open file
-    String path = "/" + speciesString[species] + tagsFilePath;
+    String path = "/" + animals.speciesToString() + tagsFilePath;
     tags = SD.open(path);
     if(!tags) {
         #ifdef OTR_DEBUG
@@ -356,21 +356,21 @@ String ANIMALS::readOptions(String filePath) {
 }
 
 void ANIMALS::readBreeds()  {
-    String filePath + "?" + speciesToString() + "/" + breedsFilePath;
+    String filePath =+ "/" + speciesToString() + "/" + breedsFilePath;
     File file = SD.open(filePath, "r");
     if (!file) {
         #ifdef OTR_DEBUG
             Serial.print("ANIMALS::readBreeds-Failed to open file: ");
             Serial.println(filePath);
         #endif
-        return "";
+        ;
     }
     breedsOptionsDropdown = "";
     breedsOptions = NULL;
     int numBreeds = 0;
 
-    while (optionsFile.available()) {
-        String line = optionsFile.readStringUntil('\n');
+    while (file.available()) {
+        String line = file.readStringUntil('\n');
         line.trim();
         breedsOptionsDropdown += line + '\n';
         breedsOptions[numBreeds] = line;
@@ -378,28 +378,22 @@ void ANIMALS::readBreeds()  {
     }
     breedsOptionsDropdown = breedsOptionsDropdown.substring(0, breedsOptionsDropdown.length() - 1);
     file.close();
-    if (optionsString.isEmpty()) {
+    if (breedsOptionsDropdown.isEmpty()) {
         #ifdef OTR_DEBUG
             Serial.print("ANIMALS::readOptions- file is empty: ");
             Serial.println(filePath);
         #endif
-        return "";
+        return;
     }
-    int index = optionsString.indexOf("\r");
-    while (index != -1)   {
-        optionsString.remove(index, 1);
-        index = optionsString.indexOf("\r");
-    }
-    
     #ifdef OTR_DEBUG
         Serial.print("ANIMALS::readOptions-Options: ");
-        Serial.println(optionsString);
+        Serial.println(breedsOptionsDropdown);
     #endif
 }
 
 void ANIMALS::readFile() {
-    Species species = Sheep;
-    animalFilePath = "/" + speciesStrings[species] + "/" + speciesGroups[species] + ".csv";
+    
+    animalFilePath = "/" + speciesToString() + "/" + animalGroup() + ".csv";
     animalFile = SD.open(animalFilePath);
     if (!animalFile) {
         #ifdef OTR_DEBUG
@@ -427,7 +421,7 @@ void ANIMALS::readFile() {
         columns[i] = animalRow.substring(0, commaIndex);
         animalRow = animalRow.substring(commaIndex + 1);
         }
-        animal = (AnimalsFile*)realloc(animal, (numAnimals + 1) * sizeof(AnimalsFile));
+        animal = (Animals*)realloc(animal, (numAnimals + 1) * sizeof(Animals));
         animal[numAnimals].breed = columns[0];
         animal[numAnimals].type = columns[1];
         animal[numAnimals].name = columns[2];
@@ -439,8 +433,8 @@ void ANIMALS::readFile() {
         else {
             animal[numAnimals].gender = false;
         }
-        animal[numAnimals].mother = columns[6];
-        animal[numAnimals].father = columns[7];
+        animal[numAnimals].dam = columns[6];
+        animal[numAnimals].sire = columns[7];
         animal[numAnimals].multi_birth = columns[8].toInt();
         animal[numAnimals].location = columns[9];
         animal[numAnimals].group = columns[10];
@@ -454,7 +448,7 @@ void ANIMALS::readFile() {
 
 void ANIMALS::readAliveOnly() {
     Species species = Sheep;
-    animalFilePath = "/" + speciesStrings[species] + "/" + speciesGroups[species] + ".csv";
+    animalFilePath = "/" + speciesToString() + "/" + animalGroup() + ".csv";
     animalFile = SD.open(animalFilePath);
     if (!animalFile) {
         #ifdef OTR_DEBUG
@@ -484,7 +478,7 @@ void ANIMALS::readAliveOnly() {
         }
         // Only add records with "Alive" status
         if (columns[11] != "Alive") {
-            aliveOnly = (AnimalsFile*)realloc(animal, (numAnimals + 1) * sizeof(AnimalsFile));
+            aliveOnly = (Animals*)realloc(animal, (numAnimals + 1) * sizeof(Animals));
             aliveOnly[numAnimals].breed = columns[0];
             aliveOnly[numAnimals].type = columns[1];
             aliveOnly[numAnimals].name = columns[2];
@@ -496,8 +490,8 @@ void ANIMALS::readAliveOnly() {
             else {
                 aliveOnly[numAnimals].gender = false;
             }
-            aliveOnly[numAnimals].mother = columns[6];
-            aliveOnly[numAnimals].father = columns[7];
+            aliveOnly[numAnimals].dam = columns[6];
+            aliveOnly[numAnimals].sire = columns[7];
             aliveOnly[numAnimals].multi_birth = columns[8].toInt();
             aliveOnly[numAnimals].location = columns[9];
             aliveOnly[numAnimals].group = columns[10];
@@ -510,9 +504,9 @@ void ANIMALS::readAliveOnly() {
     }
     animalFile.close();
 }
-void ANIMALS::addNew(AnimalsFile newAnimal) {
+void ANIMALS::addNew(Animals newAnimal) {
     //readAnimalFile() must have already run
-    animal = (AnimalsFile*)realloc(animal, (numAnimals + 1) * sizeof(AnimalsFile));
+    animal = (Animals*)realloc(animal, (numAnimals + 1) * sizeof(Animals));
     animal[numAnimals] = newAnimal;
     numAnimals++;
     //append to file
@@ -529,8 +523,8 @@ void ANIMALS::addNew(AnimalsFile newAnimal) {
     animalFile.print(newAnimal.rfid + ",");
     animalFile.print(newAnimal.tagged + ",");
     animalFile.print((newAnimal.gender ? "F," : "M,") );
-    animalFile.print(newAnimal.mother + ",");
-    animalFile.print(newAnimal.father + ",");
+    animalFile.print(newAnimal.dam + ",");
+    animalFile.print(newAnimal.sire + ",");
     animalFile.print(newAnimal.multi_birth + ",");
     animalFile.print(newAnimal.location + ",");
     animalFile.print(newAnimal.group + ",");
@@ -540,7 +534,7 @@ void ANIMALS::addNew(AnimalsFile newAnimal) {
     animalFile.close();
 }
 
-void ANIMALS::modify(AnimalsFile updatedAnimal) {   
+void ANIMALS::modify(Animals updatedAnimal) {   
     for (int i = 0; i < numAnimals; i++) {
         if (animal[i].rfid == updatedAnimal.rfid) {
             animal[i] = updatedAnimal;
@@ -550,9 +544,9 @@ void ANIMALS::modify(AnimalsFile updatedAnimal) {
     }
 }
 
-void ANIMALS::archive(AnimalsFile animalToRemove) {  
+void ANIMALS::archive(Animals animalToRemove) {  
     Species species = Sheep; 
-    animalArchiveFilePath = "/" + speciesStrings[species] + "/archive/" + speciesGroups[species] + "_archive.csv";
+    animalArchiveFilePath = "/" + speciesToString() + "/archive/" + animalGroup() + "_archive.csv";
     File animalArchiveFile = SD.open(animalArchiveFilePath, FILE_APPEND);
     if (!animalArchiveFile) {
         #ifdef OTR_DEBUG
@@ -566,8 +560,8 @@ void ANIMALS::archive(AnimalsFile animalToRemove) {
     animalArchiveFile.print(animalToRemove.rfid + ",");
     animalArchiveFile.print(animalToRemove.tagged + ",");
     animalArchiveFile.print((animalToRemove.gender ? "F," : "M,") );
-    animalArchiveFile.print(animalToRemove.mother + ",");
-    animalArchiveFile.print(animalToRemove.father + ",");
+    animalArchiveFile.print(animalToRemove.dam + ",");
+    animalArchiveFile.print(animalToRemove.sire + ",");
     animalArchiveFile.print(animalToRemove.multi_birth + ",");
     animalArchiveFile.print(animalToRemove.location + ","); 
     animalArchiveFile.print(animalToRemove.group + ",");
@@ -577,7 +571,7 @@ void ANIMALS::archive(AnimalsFile animalToRemove) {
     animalArchiveFile.close();
 }
 
-void ANIMALS::remove(AnimalsFile animalToRemove) {
+void ANIMALS::remove(Animals animalToRemove) {
     for (int i = 0; i < numAnimals; i++) {
         if (animal[i].rfid == animalToRemove.rfid) {
             // Shift all elements after the removed element to the left
@@ -591,7 +585,7 @@ void ANIMALS::remove(AnimalsFile animalToRemove) {
     }
 }
 
-bool ANIMALS::find(String& rfid, AnimalsFile& result) {
+bool ANIMALS::find(String& rfid, Animals& result) {
     for (int i = 0; i < numAnimals; i++) {
         if (animal[i].rfid == rfid) {
             #ifdef OTR_DEBUG
@@ -652,8 +646,8 @@ void ANIMALS::renewFile() {
         newFile.print(animal[i].rfid + ",");
         newFile.print(animal[i].tagged + ",");
         newFile.print((animal[i].gender ? "F," : "M,") );
-        newFile.print(animal[i].mother + ",");
-        newFile.print(animal[i].father + ",");
+        newFile.print(animal[i].dam + ",");
+        newFile.print(animal[i].sire + ",");
         newFile.print(animal[i].multi_birth + ",");
         newFile.print(animal[i].location + ",");
         newFile.print(animal[i].group + ",");
@@ -665,8 +659,8 @@ void ANIMALS::renewFile() {
 }
 //UNFINISHED
 void RECORDS::readFile() {
-    Species species = Sheep;
-    recordsFilePath = "/" + speciesStrings[species] + "/records.csv";
+    
+    recordsFilePath = "/" + animals.speciesToString() + "/records.csv";
     recordsFile = SD.open(recordsFilePath, "r");
     if (!recordsFile) {
         Serial.println("Failed to open records file");
@@ -758,7 +752,7 @@ void RECORDS::createSession() {
         records.deleteSession();
     }
     String dateStr = getSessionDate();
-    Species species = Sheep;
+    
     readLastSessions();
     #ifdef OTR_DEBUG
         Serial.print("RECORDS::createSession - " + dateStr);
@@ -795,7 +789,7 @@ void RECORDS::createSession() {
     }
   
     file.close();
-    sessionFilePath = "/" + speciesStrings[species] + "/sessions/" + session + ".csv";
+    sessionFilePath = "/" + animals.speciesToString() + "/sessions/" + session + ".csv";
     File sessionFile = SD.open(sessionFilePath, "w");
     if (!sessionFile) {
         #ifdef OTR_DEBUG
@@ -812,12 +806,12 @@ void RECORDS::createSession() {
 }
 
 void RECORDS::deleteSession() {
-    String path = "/" + speciesStrings[species] + "/sessions/" + session + ".csv";
+    String path = "/" + animals.speciesToString() + "/sessions/" + session + ".csv";
     deleteFileSD(path.c_str());
 }
 String RECORDS::readLastSessions() {
     
-    lastSessionFilePath = "/" + speciesStrings[species] + "/sessions/last_sessions.txt";
+    lastSessionFilePath = "/" + animals.speciesToString() + "/sessions/last_sessions.txt";
     
     String sessionsDropdown;
 
@@ -907,8 +901,8 @@ RECORDS::Records* RECORDS::find(String& rfid, int& num) {
 
 // Chemical Inventory
 void TREATMENTS::loadProducts() {
-        Species species = Sheep;
-        productsFilePath = "/" + speciesStrings[species] + "/" + speciesGroups[species] + ".csv";
+        
+        productsFilePath = "/" + animals.speciesToString() + "/products.csv";
         File productsFile = SD.open(productsFilePath);
         if (!productsFile) {
             #ifdef OTR_DEBUG
@@ -963,8 +957,8 @@ void TREATMENTS::loadProducts() {
 }
 
 void TREATMENTS::addProduct(String productRow) {
-    Species species = Sheep;
-    productsFilePath = "/" + speciesStrings[species] + "/" + speciesGroups[species] + ".csv";
+    
+    productsFilePath = "/" + animals.speciesToString() + "/products.csv";
     File productsFile = SD.open(productsFilePath);
     if (!productsFile) {
         #ifdef OTR_DEBUG
