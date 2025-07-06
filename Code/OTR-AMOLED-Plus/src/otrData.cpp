@@ -3,15 +3,18 @@
 #include "otrTime.h"
 #include "LilyGo_AMOLED.h"
 
-Species species = Sheep;
+
 extern RECORDS records;
+
+
 
 void TAGS::readTagsFile() {
     //Open file
-    tags = SD.open(tagsFilePath);
+    String path = "/" + speciesString[species] + tagsFilePath;
+    tags = SD.open(path);
     if(!tags) {
         #ifdef OTR_DEBUG
-            Serial.println("Failed to open tags file");
+            Serial.println("TAGS::readTagsFile- Failed to open tags file");
         #endif
         return;
     }
@@ -286,88 +289,36 @@ TAGS::Tags TAGS::getTagDetails(String RFID) {
     tags.close();
     return tagDetails;
 }
-//INCOMPLETE
-void readTraitsFromCSV() {
-    // Reads traits from csv
-    // Format of file is Traitname followed by options separated by commas
-    // User can define their own traits therefore no fixed dimensions
-    // uint8_t numTraits = 0;
-    // Traits* trait = nullptr;
-    // File traitsFile = LittleFS.open(traitsFilePath);
 
-    // if (traitsFile) {
-    //     while (traitsFile.available()) {
-    //         traitsFile.readStringUntil('\n');
-    //         numTraits++;
-    //     }
-    //     traitsFile.seek(0); // move back to the beginning of the file
-    //     trait = new Traits[numTraits-1]; // allocate memory for the array
-    //     while (traitsFile.available()) {
-    //         String traitRow = traitsFile.readStringUntil('\n');
-    //         if (numTraits == 0) {
-    //             // Skip header row
-    //             continue;
-    //         }
-    //         // Pick out columns
-    //         trait[numTraits-1].traitName = traitRow.substring(0, traitRow.indexOf(","));
-    //         String allTraitOptions = traitRow.substring(traitRow.indexOf(",") + 1, traitRow.length());
-    //         int optionCommaIndex;
-    //         while ((optionCommaIndex = allTraitOptions.indexOf(",")) != -1) {
-    //             String option = allTraitOptions.substring(0, optionCommaIndex);
-    //             trait[numTraits-1].options.push_back(option);
-    //             allTraitOptions = allTraitOptions.substring(optionCommaIndex + 1, allTraitOptions.length());
-    //         }
-    //         // Add the last option
-    //         trait[numTraits-1].options.push_back(allTraitOptions);
-    //     }
-    // }
- 
-    // while (traitsFile.available()) {
-    //     // Read a row
-    //     String traitRow = traitsFile.readStringUntil('\n');
-    //     if (numTraits == 0) {
-    //         // Skip header row
-    //         traitRow = traitsFile.readStringUntil('\n');
-    //     }
-    //     String traitName = traitRow.substring(0, traitRow.indexOf(","));
-    //     Traits newTrait;
-    //     newTrait.traitName = traitName;
-    //     String allTraitOptions = traitRow.substring(traitRow.indexOf(",") + 1, traitRow.length());
-    //     int optionCommaIndex;
-    //     while ((optionCommaIndex = allTraitOptions.indexOf(",")) != -1) {
-    //         String option = allTraitOptions.substring(0, optionCommaIndex);
-    //         TraitOptions newOption;
-    //         newOption.optionName = option;
-    //         newTrait.options.push_back(newOption);
-    //         allTraitOptions = allTraitOptions.substring(optionCommaIndex + 1, allTraitOptions.length());
-    //     }
-    //     // Add the last option
-    //     TraitOptions newOption;
-    //     newOption.optionName = allTraitOptions;
-    //     newTrait.options.push_back(newOption);
-    //     // Add the trait to the traits vector
-    //     traits.push_back(newTrait);
-    //     numTraits++;
-    // }
-    // traitsFile.close();
-}
-
-//Not working
-void printTraits() {
-    // for (size_t i = 0; i < traits.size(); i++) {
-    //     Serial.print("Trait: ");
-    //     Serial.println(traits[i].traitName);
-    //     for (size_t j = 0; j < traits[i].options.size(); j++) {
-    //         Serial.print("  Option: ");
-    //         Serial.println(traits[i].options[j].optionName);
-    //     }
-    // }
-}
 
 ANIMALS::ANIMALS()  {
     numAnimals = 0;
     totalAnimals = 0;
+    currentSpecies = Sheep;
 }
+
+void ANIMALS::setSpecies(Species s) {
+  currentSpecies = s;
+}
+
+ANIMALS::Species ANIMALS::getSpecies() {
+  return currentSpecies;
+}
+
+String ANIMALS::speciesToString() {
+  switch (currentSpecies) {
+    case Sheep: return "Sheep";
+    case Cattle: return "Cattle";
+  }
+}
+
+String ANIMALS::animalGroup() {
+  switch (currentSpecies) {
+    case Sheep: return "Flock";
+    case Cattle: return "Herd";
+  }
+}
+
 String ANIMALS::readOptions(String filePath) {
     File optionsFile = SD.open(filePath, "r");
     if (!optionsFile) {
@@ -403,7 +354,49 @@ String ANIMALS::readOptions(String filePath) {
     #endif
     return optionsString;
 }
+
+void ANIMALS::readBreeds()  {
+    String filePath + "?" + speciesToString() + "/" + breedsFilePath;
+    File file = SD.open(filePath, "r");
+    if (!file) {
+        #ifdef OTR_DEBUG
+            Serial.print("ANIMALS::readBreeds-Failed to open file: ");
+            Serial.println(filePath);
+        #endif
+        return "";
+    }
+    breedsOptionsDropdown = "";
+    breedsOptions = NULL;
+    int numBreeds = 0;
+
+    while (optionsFile.available()) {
+        String line = optionsFile.readStringUntil('\n');
+        line.trim();
+        breedsOptionsDropdown += line + '\n';
+        breedsOptions[numBreeds] = line;
+        numBreeds ++;
+    }
+    breedsOptionsDropdown = breedsOptionsDropdown.substring(0, breedsOptionsDropdown.length() - 1);
+    file.close();
+    if (optionsString.isEmpty()) {
+        #ifdef OTR_DEBUG
+            Serial.print("ANIMALS::readOptions- file is empty: ");
+            Serial.println(filePath);
+        #endif
+        return "";
+    }
+    int index = optionsString.indexOf("\r");
+    while (index != -1)   {
+        optionsString.remove(index, 1);
+        index = optionsString.indexOf("\r");
+    }
     
+    #ifdef OTR_DEBUG
+        Serial.print("ANIMALS::readOptions-Options: ");
+        Serial.println(optionsString);
+    #endif
+}
+
 void ANIMALS::readFile() {
     Species species = Sheep;
     animalFilePath = "/" + speciesStrings[species] + "/" + speciesGroups[species] + ".csv";

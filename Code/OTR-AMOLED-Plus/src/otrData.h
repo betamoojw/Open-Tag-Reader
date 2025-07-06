@@ -73,7 +73,7 @@ class TAGS {
 
 class ANIMALS {
     public:
-        struct AnimalsFile {
+        struct Animals {
             String breed;
             String type;    //can't remember why I added this.  Possibly to differentiate between stud andcommercial
             String name;
@@ -106,26 +106,57 @@ class ANIMALS {
         String animalArchiveFilePath = "/archive/aminals_archive.csv";
         String animalFilePathTemp = "/backup/animals.tmp";
         String dogsFilePath = "/dogs.csv";
+        struct Options {
+            String name;
+            int numOptions;
+            String* options;
+            String optionsDropdown;
+
+            Options(String defaultName = "breeds",
+                    String defaultDropdown = "None") {
+                name = defaultName;
+                numOptions = 0;
+                options = nullptr;         
+                optionsDropdown = defaultDropdown;
+            }
+        };
+        String breedsFilePath = "/breeds.csv";
         String typesFilePath = "/types.csv";
         String groupsFilePath = "/groups.csv";
-        String typesOptions = "Stud\nCommercial";
-        String groupsOptions = "Ewes\nLambs\nRams";
+        String* breedsOptions;
+        String* typesOptions;
+        String* groupsOptions;
+        String breedsOptionsDropdown = "Merino\nCrossbred\nDorper";
+        String typesOptionsDropdown = "Stud\nCommercial";
+        String groupsOptionsDropdown = "Ewes\nLambs\nRams";
 
         ANIMALS();
         ~ANIMALS() {
             delete [] animal;
         }
+
+        enum Species {
+            Sheep,
+            Cattle
+        };
+        
+        void setSpecies(Species s);
+        Species getSpecies();
+        String speciesToString();
+        String animalGroup();
         String readOptions(String filePath);
+        void readBreeds();
+        void readTypes();
         void readGroups();
         void readFile();
         void readAliveOnly();
-        void addNew(AnimalsFile);   
-        void modify(AnimalsFile);
-        void archive(AnimalsFile);
-        void remove(AnimalsFile);
+        void addNew(Animals);   
+        void modify(Animals);
+        void archive(Animals);
+        void remove(Animals);
         void create();
         void renewFile();
-        bool find(String& rfid, AnimalsFile& result);
+        bool find(String& rfid, Animals& result);
         int countAllAlive();
         int countByGroup();
         
@@ -133,13 +164,14 @@ class ANIMALS {
         bool animalsFilechanged = false;
         uint16_t totalAnimals;
 
+
+
     
     private:
         AnimalsFile* animal;
         AnimalsFile* aliveOnly;
-        int numAnimals;
-        
-        
+        int numAnimals; 
+        Species currentSpecies;
 };
 
 class RECORDS {
@@ -259,13 +291,6 @@ class TREATMENTS {
     Products* product;
     Treatments* treatment;
     Humans* human;
-};
-
-const String speciesStrings[2] = {"Sheep", "Cattle"};
-const String speciesGroups[2] = {"Flock", "Herd"};
-enum Species {
-    Sheep,
-    Cattle
 };
 
 
