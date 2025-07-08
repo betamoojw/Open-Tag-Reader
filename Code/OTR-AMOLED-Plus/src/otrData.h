@@ -75,10 +75,10 @@ class ANIMALS {
     public:
         struct Animals {
             String breed;
-            String type;    //can't remember why I added this.  Possibly to differentiate between stud andcommercial
+            String type;    //can't remember why I added this.  Possibly to differentiate between stud andc ommercial
             String name;
             String rfid;    //unique
-            String tagged;
+            String tagged;  //date acquired dd/mm/yyyy
             bool gender;    //fixed M/F TRUE == "F"
             String dam;  //future feature
             String sire;
