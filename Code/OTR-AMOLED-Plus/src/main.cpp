@@ -36,6 +36,7 @@ TAGS tags;
 ANIMALS animals;
 
 
+
 //CONFIG #################################
 bool readerBoard =0;  // 0 for Priority 1 (ASCII Output), 1 for WL134A
 bool readerSerial = 1; // 0 for Serial0, 1 for Serial1 
@@ -133,8 +134,17 @@ void loop()
                                     // if valid scan
         //Serial.println(rfidreader.scan());
         timeStampSystem();
-        //check tag is active
         Serial.println("Scan result" + rfidreader.scanResult);
+        tags.resetCurrentTag();
+        
+        animals.resetCurrentAnimal();
+       
+
+    } else  {
+         //check tag is active
+        if (!tags.activeFlag && !tags.isNew)   {
+            tags.activeFlag = tags.isTagActive(rfidreader.scanResult);
+        }
         if(tags.isTagActive(rfidreader.scanResult))     {
             // tag Active - find associated records
             TAGS::Tags tagDetails = tags.getActiveTagDetails(rfidreader.scanResult);
@@ -154,7 +164,6 @@ void loop()
                 // tag not known - Activate Tag
             }
         }
-
     }
     
     

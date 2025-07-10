@@ -34,8 +34,11 @@ class TAGS {
         uint16_t rowsAdded;
         int csvBucketIndex = 0;
         int numTags = 0;
+        bool activeFlag = false;
+        bool isNew = false;
         int numActiveTags = 0;
         int numUnusedTags = 0;
+        void resetCurrentTag();
         void readBucketFile();
         void readTagsFile();
         void readTagsActive();
@@ -52,11 +55,13 @@ class TAGS {
         File tags;
         Tags* allTags;
         Tags* activeTags;
+        Tags currentTag;
+    
 
     private:
         char *tagID;
         
-        bool isNew;
+        
         bool checkNew();
         void addTagFromBucket();
         // NLIS requirement to report replaced tags https://www.nlis.com.au/NLISDocuments/Prepare%20a%20file%20for%20upload.pdf
@@ -89,6 +94,7 @@ class ANIMALS {
             String whpSafeDate;
             String comment;
         };
+        Animals currentAnimal;
 
         struct Deaths {
             // https://www.nlis.com.au/NLISDocuments/Deceased%20livestock%20on%20PIC%20(Mar%2014)%20V2.pdf
@@ -154,6 +160,7 @@ class ANIMALS {
         void modify(Animals);
         void archive(Animals);
         void remove(Animals);
+        void resetCurrentAnimal();
         void create();
         void renewFile();
         bool find(String& rfid, Animals& result);

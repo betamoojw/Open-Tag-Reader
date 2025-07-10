@@ -8,6 +8,17 @@ extern RECORDS records;
 extern ANIMALS animals;
 
 
+void TAGS::resetCurrentTag() {
+    currentTag.PIC = "";
+    currentTag.RFID = "";
+    currentTag.NLISID = "";
+    currentTag.Visual_ID = "";
+    currentTag.IssueDate = "";
+    currentTag.ManufactureDate = "";
+    currentTag.Colour = "";
+    currentTag.Status = "";
+}
+
 void TAGS::readTagsFile() {
     //Open file
     String path = "/" + animals.speciesToString() + tagsFilePath;
@@ -309,6 +320,7 @@ String ANIMALS::speciesToString() {
   switch (currentSpecies) {
     case Sheep: return "Sheep";
     case Cattle: return "Cattle";
+    default: return "";
   }
 }
 
@@ -316,6 +328,7 @@ String ANIMALS::animalGroup() {
   switch (currentSpecies) {
     case Sheep: return "Flock";
     case Cattle: return "Herd";
+    default: return "";
   }
 }
 
@@ -583,6 +596,23 @@ void ANIMALS::remove(Animals animalToRemove) {
             return;
         }
     }
+}
+
+void ANIMALS::resetCurrentAnimal() {
+    currentAnimal.breed = "";
+    currentAnimal.type = "";
+    currentAnimal.name = "";
+    currentAnimal.rfid = "";
+    currentAnimal.tagged = false;
+    currentAnimal.gender = false;
+    currentAnimal.dam = "";
+    currentAnimal.sire = "";
+    currentAnimal.multi_birth = 0;
+    currentAnimal.location = "";
+    currentAnimal.group = "";
+    currentAnimal.status = "";
+    currentAnimal.whpSafeDate = "";
+    currentAnimal.comment = "";
 }
 
 bool ANIMALS::find(String& rfid, Animals& result) {

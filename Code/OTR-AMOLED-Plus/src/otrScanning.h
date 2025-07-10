@@ -81,6 +81,7 @@ class RFIDReader {
         String previousScans[10];
         bool validateRFID(const char* RFID);
         String scan();
+        bool scanFlag; //true if valid scan received
     private:
          RFIDConfig config;
          

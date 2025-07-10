@@ -294,10 +294,12 @@ String RFIDReader::scan() {
                 Serial.print("RFIDREADER:scan - Valid RFID! ");
                 Serial.println(scanResult);
             #endif
+            rfidreader.scanFlag = true;
             successfulScan(scanResult);
             
             return scanResult;
         } else {
+            rfidreader.scanFlag = false;
             if (scanError == "Duplicate")   {
                 #ifdef OTR_DEBUG
                     Serial.println("RFIDREADER:scan - Duplicate scan!");
