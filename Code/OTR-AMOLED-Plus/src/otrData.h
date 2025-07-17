@@ -35,6 +35,7 @@ class TAGS {
         int csvBucketIndex = 0;
         int numTags = 0;
         bool activeFlag = false;
+        bool knownFlag = false;
         bool isNew = false;
         int numActiveTags = 0;
         int numUnusedTags = 0;
@@ -50,6 +51,7 @@ class TAGS {
         //bool rowParserFinished();
         int countActiveTags();
         int countAllTagsAvailable(); // both active and Unused tags
+        void addTag();
         //CSV_Parser bucketParser;
         File bucket;
         File tags;

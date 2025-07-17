@@ -301,6 +301,34 @@ TAGS::Tags TAGS::getTagDetails(String RFID) {
     return tagDetails;
 }
 
+void TAGS::addTag() {
+    File tagsFile = SD.open(tagsFilePath, FILE_APPEND);
+    if (!tagsFile) {
+        #ifdef OTR_DEBUG
+            Serial.println("TAGS::addTag-Failed to open tags file");
+        #endif
+        return;
+    }
+    tagsFile.print(currentTag.PIC);
+    tagsFile.print(",");   
+    tagsFile.print(currentTag.RFID);
+    tagsFile.print(",");
+    tagsFile.print(currentTag.NLISID);
+    tagsFile.print(",");
+    tagsFile.print(currentTag.Visual_ID);
+    tagsFile.print(",");
+    tagsFile.print(currentTag.IssueDate);
+    tagsFile.print(",");
+    tagsFile.print(currentTag.ManufactureDate);
+    tagsFile.print(",");
+    tagsFile.print(currentTag.Colour);
+    tagsFile.print(",");
+    tagsFile.print(currentTag.Status);
+    tagsFile.println();
+    numTags++; 
+    
+    tagsFile.close();
+}
 
 ANIMALS::ANIMALS()  {
     numAnimals = 0;

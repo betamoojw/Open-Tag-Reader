@@ -136,11 +136,70 @@ void loop()
         timeStampSystem();
         Serial.println("Scan result" + rfidreader.scanResult);
         tags.resetCurrentTag();
-        
         animals.resetCurrentAnimal();
-       
+    
 
     } else  {
+        // Check if tag and animal details are populated and matching scan result
+        if (rfidreader.scanResult == "") {
+            return;
+        } else if (tags.currentTag.RFID == rfidreader.scanResult) {
+            // tag details already populated
+            // check if animal details are populated
+            if (animals.currentAnimal.rfid == rfidreader.scanResult) {
+                // animal details already populated
+                return;
+            } else {
+                //retrieve animal details
+            }
+        } else {
+            //retrieve tag details
+            if (!tags.knownFlag && !tags.isNew) {
+                //search for tag - set flags
+                tags.activeFlag = tags.isTagActive(rfidreader.scanResult);
+                if (tags.activeFlag) {
+                    tags.knownFlag = true;
+                }  else {
+                    tags.knownFlag = tags.isTagKnown(rfidreader.scanResult);
+                    if (!tags.knownFlag) {
+                        tags.isNew = true;
+                    }
+                }  
+                return;
+            } else if (tags.activeFlag) {
+                tags.currentTag = tags.getActiveTagDetails(rfidreader.scanResult);
+            } else if (!tags.activeFlag && tags.knownFlag && !tags.isNew) {
+                tags.currentTag = tags.getTagDetails(rfidreader.scanResult);                
+            } else if (tags.isNew)  {
+                //create new tag
+                tags.currentTag.RFID = rfidreader.scanResult;
+                tags.currentTag.Status = "Active";
+                tags.addTag(); // add tag to tags file
+                tags.knownFlag = true;
+                tags.isNew = false; // reset new tag flag
+                //todo: add tag functionality - tagging mode - create new animals
+
+            }
+
+            if (!tags.activeFlag && !tags.isNew) {
+                // check if tag is active
+                tags.activeFlag = tags.isTagActive(rfidreader.scanResult);
+                if (tags.activeFlag) {
+                    // tag is active - get tag details
+                    tags.currentTag = tags.getActiveTagDetails(rfidreader.scanResult);
+                } else {
+                    // tag is not active - check if tag is known
+                    if (tags.isTagKnown(rfidreader.scanResult)) {
+                        // tag is known - get tag details
+                        tags.currentTag = tags.getTagDetails(rfidreader.scanResult);
+                    } else {
+                        // tag is not known - activate tag
+                        tags.isNew = true; // set flag to indicate new tag
+                    }
+                }
+
+            }
+        }
          //check tag is active
         if (!tags.activeFlag && !tags.isNew)   {
             tags.activeFlag = tags.isTagActive(rfidreader.scanResult);
