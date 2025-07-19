@@ -137,8 +137,6 @@ void loop()
         Serial.println("Scan result" + rfidreader.scanResult);
         tags.resetCurrentTag();
         animals.resetCurrentAnimal();
-    
-
     } else  {
         // Check if tag and animal details are populated and matching scan result
         if (rfidreader.scanResult == "") {
@@ -206,24 +204,21 @@ void loop()
         }
         if(tags.isTagActive(rfidreader.scanResult))     {
             // tag Active - find associated records
-            TAGS::Tags tagDetails = tags.getActiveTagDetails(rfidreader.scanResult);
-            
+            tags.currentTag = tags.getActiveTagDetails(rfidreader.scanResult);
         } else {
             // check tag is known
             if(tags.isTagKnown(rfidreader.scanResult)) {
                 // tag known -get tag details
-                TAGS::Tags tagDetails = tags.getTagDetails(rfidreader.scanResult);
-                if(tagDetails.Status == "Unused") {
+                tags.currentTag = tags.getTagDetails(rfidreader.scanResult);
+                if(tags.currentTag.Status == "Unused") {
                     // Activate tag
-                } else if(tagDetails.Status == "Inactive") {
+
+                } else if(tags.currentTag.Status == "Inactive") {
                     // Tag either belongs to Dead or Sold animal
                 }
-
             } else {
                 // tag not known - Activate Tag
             }
         }
     }
-    
-    
 }
