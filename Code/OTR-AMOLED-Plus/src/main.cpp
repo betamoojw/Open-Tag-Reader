@@ -1,9 +1,6 @@
 /**
  *  OPEN TAG READER
  * 
- *  Initial test of board with no RFID Reader board attached
- *  Goals
- *  - Basic Screen 
  * 
  *  Lilygo T-Display-S3 AMOELD PLUS
  * 
@@ -34,6 +31,9 @@ BUZZER buzzer;
 RECORDS records;
 TAGS tags;
 ANIMALS animals;
+
+// Keep track of last-recorded RFID to avoid duplicate writes for the same scan
+static String lastRecordedRFID = "";
 
 
 
@@ -131,8 +131,7 @@ void loop()
     lv_task_handler();
     delay(5);
     if(rfidreader.scan() != "") {   // reads incoming serial and checks if it is a valid tag
-                                    // if valid scan
-        //Serial.println(rfidreader.scan());
+         
         timeStampSystem();
         Serial.println("Scan result" + rfidreader.scanResult);
         tags.resetCurrentTag();
@@ -219,6 +218,32 @@ void loop()
             } else {
                 // tag not known - Activate Tag
             }
+        }
+        // If we have resolved an animal for this scan and haven't recorded it yet,
+        // create (or continue) a session and append a record.
+        if (animals.currentAnimal.rfid == rfidreader.scanResult && lastRecordedRFID != rfidreader.scanResult) {
+            // Ensure there's an active session
+            if (records.session == "") {
+                records.createSession();
+            }
+            RECORDS::Records newRecord;
+            newRecord.session = (records.session == "" ? "NONE" : records.session);
+            newRecord.rfid = rfidreader.scanResult;
+            newRecord.timeStamp = String(timeStampSystem());
+            newRecord.location = animals.currentAnimal.location;
+            // Prefer animal status, fall back to tag status
+            newRecord.status = (animals.currentAnimal.status != "" ? animals.currentAnimal.status : tags.currentTag.Status);
+            newRecord.type = animals.currentAnimal.type;
+            newRecord.group = animals.currentAnimal.group;
+            newRecord.weight = "";
+            newRecord.trait = "";
+            newRecord.treat = "";
+            newRecord.comment = "";
+            records.addNew(newRecord);
+            Serial.println("Record added for RFID: " + rfidreader.scanResult);
+            // UI feedback
+            successfulScan(rfidreader.scanResult);
+            lastRecordedRFID = rfidreader.scanResult;
         }
     }
 }

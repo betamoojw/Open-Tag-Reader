@@ -81,13 +81,15 @@ class TAGS {
 class ANIMALS {
     public:
         struct Animals {
+            String rfid;    //unique
+            String tagColour; // assists manual reading
+            String visual_id; // and modification to csv
             String breed;
             String type;    //can't remember why I added this.  Possibly to differentiate between stud andc ommercial
             String name;
-            String rfid;    //unique
             String tagged;  //date acquired dd/mm/yyyy
             bool gender;    //fixed M/F TRUE == "F"
-            String dam;  //future feature
+            String dam;  
             String sire;
             uint8_t multi_birth; //was the animal born as a single twin, etc
             String location;

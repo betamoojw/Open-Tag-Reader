@@ -450,10 +450,10 @@ void ANIMALS::readFile() {
         // Read a row
         String animalRow = animalFile.readStringUntil('\n');
         totalAnimals++;
-        // Pick out columns
+        // Pick out columns : RFID, Tag_Colour, Visual_ID, Breed, Type, Name, Tagged, Gender, Dam, Sire, Multi_birth, Location, Group, Status, WHP, Comment
         int commaIndex = 0;
-        String columns[15];
-        for (int i = 0; i < 14; i++) {
+        String columns[16];
+        for (int i = 0; i < 15; i++) {
         commaIndex = animalRow.indexOf(",", commaIndex);
         if (commaIndex == -1) {
             columns[i] = animalRow.substring(commaIndex + 1);
@@ -463,25 +463,28 @@ void ANIMALS::readFile() {
         animalRow = animalRow.substring(commaIndex + 1);
         }
         animal = (Animals*)realloc(animal, (numAnimals + 1) * sizeof(Animals));
-        animal[numAnimals].breed = columns[0];
-        animal[numAnimals].type = columns[1];
-        animal[numAnimals].name = columns[2];
-        animal[numAnimals].rfid = columns[3];
-        animal[numAnimals].tagged = columns[4];
-        if (columns[5] == "F") {
+        // Assign according to  column order
+        animal[numAnimals].rfid = columns[0];
+        animal[numAnimals].tagColour = columns[1];
+        animal[numAnimals].visual_id = columns[2];
+        animal[numAnimals].breed = columns[3];
+        animal[numAnimals].type = columns[4];
+        animal[numAnimals].name = columns[5];
+        animal[numAnimals].tagged = columns[6];
+        if (columns[7] == "F") {
             animal[numAnimals].gender = true;
         }
         else {
             animal[numAnimals].gender = false;
         }
-        animal[numAnimals].dam = columns[6];
-        animal[numAnimals].sire = columns[7];
-        animal[numAnimals].multi_birth = columns[8].toInt();
-        animal[numAnimals].location = columns[9];
-        animal[numAnimals].group = columns[10];
-        animal[numAnimals].status = columns[11];
-        animal[numAnimals].whpSafeDate = (columns[12]);
-        animal[numAnimals].comment = columns[13];
+        animal[numAnimals].dam = columns[8];
+        animal[numAnimals].sire = columns[9];
+        animal[numAnimals].multi_birth = columns[10].toInt();
+        animal[numAnimals].location = columns[11];
+        animal[numAnimals].group = columns[12];
+        animal[numAnimals].status = columns[13];
+        animal[numAnimals].whpSafeDate = (columns[14]);
+        animal[numAnimals].comment = columns[15];
         numAnimals++; // Move the increment to the end
     }
     animalFile.close();
@@ -505,10 +508,10 @@ void ANIMALS::readAliveOnly() {
         // Read a row
         String animalRow = animalFile.readStringUntil('\n');
         totalAnimals++;
-        // Pick out columns
+        // Pick out columns (new fixed order)
         int commaIndex = 0;
-        String columns[15];
-        for (int i = 0; i < 14; i++) {
+        String columns[16];
+        for (int i = 0; i < 15; i++) {
             commaIndex = animalRow.indexOf(",", commaIndex);
             if (commaIndex == -1) {
                 columns[i] = animalRow.substring(commaIndex + 1);
@@ -517,28 +520,30 @@ void ANIMALS::readAliveOnly() {
             columns[i] = animalRow.substring(0, commaIndex);
             animalRow = animalRow.substring(commaIndex + 1);
         }
-        // Only add records with "Alive" status
-        if (columns[11] != "Alive") {
-            aliveOnly = (Animals*)realloc(animal, (numAnimals + 1) * sizeof(Animals));
-            aliveOnly[numAnimals].breed = columns[0];
-            aliveOnly[numAnimals].type = columns[1];
-            aliveOnly[numAnimals].name = columns[2];
-            aliveOnly[numAnimals].rfid = columns[3];
-            aliveOnly[numAnimals].tagged = columns[4];
-            if (columns[5] == "F") {
+        // Only add records with "Alive" status (status is column index 13 in new layout)
+        if (columns[13] == "Alive") {
+            aliveOnly = (Animals*)realloc(aliveOnly, (numAnimals + 1) * sizeof(Animals));
+            aliveOnly[numAnimals].rfid = columns[0];
+            aliveOnly[numAnimals].tagColour = columns[1];
+            aliveOnly[numAnimals].visual_id = columns[2];
+            aliveOnly[numAnimals].breed = columns[3];
+            aliveOnly[numAnimals].type = columns[4];
+            aliveOnly[numAnimals].name = columns[5];
+            aliveOnly[numAnimals].tagged = columns[6];
+            if (columns[7] == "F") {
                 aliveOnly[numAnimals].gender = true;
             }
             else {
                 aliveOnly[numAnimals].gender = false;
             }
-            aliveOnly[numAnimals].dam = columns[6];
-            aliveOnly[numAnimals].sire = columns[7];
-            aliveOnly[numAnimals].multi_birth = columns[8].toInt();
-            aliveOnly[numAnimals].location = columns[9];
-            aliveOnly[numAnimals].group = columns[10];
-            aliveOnly[numAnimals].status = columns[11];
-            aliveOnly[numAnimals].whpSafeDate = (columns[12]);
-            aliveOnly[numAnimals].comment = columns[13];
+            aliveOnly[numAnimals].dam = columns[8];
+            aliveOnly[numAnimals].sire = columns[9];
+            aliveOnly[numAnimals].multi_birth = columns[10].toInt();
+            aliveOnly[numAnimals].location = columns[11];
+            aliveOnly[numAnimals].group = columns[12];
+            aliveOnly[numAnimals].status = columns[13];
+            aliveOnly[numAnimals].whpSafeDate = (columns[14]);
+            aliveOnly[numAnimals].comment = columns[15];
             numAnimals++; // Move the increment to the end            
         }
 
@@ -558,10 +563,13 @@ void ANIMALS::addNew(Animals newAnimal) {
         #endif
         return;
     }
+    // Write new fixed order: RFID, Tag_Colour, Visual_ID, Breed, Type, Name, Tagged, Gender, Dam, Sire, Multi_birth, Location, Group, Status, WHP, Comment
+    animalFile.print(newAnimal.rfid + ",");
+    animalFile.print(newAnimal.tagColour + ",");
+    animalFile.print(newAnimal.visual_id + ",");
     animalFile.print(newAnimal.breed + ",");
     animalFile.print(newAnimal.type + ",");
     animalFile.print(newAnimal.name + ",");
-    animalFile.print(newAnimal.rfid + ",");
     animalFile.print(newAnimal.tagged + ",");
     animalFile.print((newAnimal.gender ? "F," : "M,") );
     animalFile.print(newAnimal.dam + ",");
@@ -595,10 +603,13 @@ void ANIMALS::archive(Animals animalToRemove) {
         #endif
         return;
     }
+    // Write archive using new fixed order
+    animalArchiveFile.print(animalToRemove.rfid + ",");
+    animalArchiveFile.print(animalToRemove.tagColour + ",");
+    animalArchiveFile.print(animalToRemove.visual_id + ",");
     animalArchiveFile.print(animalToRemove.breed + ",");
     animalArchiveFile.print(animalToRemove.type + ",");
     animalArchiveFile.print(animalToRemove.name + ",");
-    animalArchiveFile.print(animalToRemove.rfid + ",");
     animalArchiveFile.print(animalToRemove.tagged + ",");
     animalArchiveFile.print((animalToRemove.gender ? "F," : "M,") );
     animalArchiveFile.print(animalToRemove.dam + ",");
@@ -630,6 +641,8 @@ void ANIMALS::resetCurrentAnimal() {
     currentAnimal.breed = "";
     currentAnimal.type = "";
     currentAnimal.name = "";
+    currentAnimal.tagColour = "";
+    currentAnimal.visual_id = "";
     currentAnimal.rfid = "";
     currentAnimal.tagged = false;
     currentAnimal.gender = false;
@@ -698,12 +711,15 @@ void ANIMALS::renewFile() {
     newFile.println(header);
     //copy animals to new file
     for (int i = 0; i < numAnimals; i++) {
+        // Write using new fixed order
+        newFile.print(animal[i].rfid + ",");
+        newFile.print(animal[i].tagColour + ",");
+        newFile.print(animal[i].visual_id + ",");
         newFile.print(animal[i].breed + ",");
         newFile.print(animal[i].type + ",");
         newFile.print(animal[i].name + ",");
-        newFile.print(animal[i].rfid + ",");
         newFile.print(animal[i].tagged + ",");
-        newFile.print((animal[i].gender ? "F," : "M,") );
+        newFile.print((animal[i].gender ? "F," : "M," ) );
         newFile.print(animal[i].dam + ",");
         newFile.print(animal[i].sire + ",");
         newFile.print(animal[i].multi_birth + ",");
@@ -763,7 +779,7 @@ void RECORDS::addNew(Records newRecord) {
         numRecords = count(recordsFilePath);
         recordsCounted = true;
     }
-    File sessionFile = SD.open(sessionFilePath, "w");
+    File sessionFile = SD.open(sessionFilePath, FILE_APPEND);
     if (!sessionFile) {
         #ifdef OTR_DEBUG
             Serial.println("RECORDS:addNew-Failed to create session file");
@@ -773,7 +789,7 @@ void RECORDS::addNew(Records newRecord) {
     totalRecords++; 
     numRecordsInSession++;
     recordsFile.print(totalRecords);
-    recordsFile.print(",") + newRecord.session + ",";
+    recordsFile.print("," + newRecord.session + ",");
     recordsFile.print(newRecord.rfid + ",");
     recordsFile.print(newRecord.timeStamp + ",");
     recordsFile.print(newRecord.location + ",");
@@ -787,7 +803,7 @@ void RECORDS::addNew(Records newRecord) {
     recordsFile.close();
     if (newRecord.session != "NONE") {
         sessionFile.print(numRecordsInSession);
-        sessionFile.print(",") + newRecord.session + ",";
+        sessionFile.print("," + newRecord.session + ",");
         sessionFile.print(newRecord.rfid + ",");
         sessionFile.print(newRecord.timeStamp + ",");
         sessionFile.print(newRecord.location + ",");

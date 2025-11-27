@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"name": "OTR-AMOLED-Plus",
+			"path": ".."
+		},
+		{
+			"name": "lora_test",
+			"path": "../../../../../OneDrive/Documents/PlatformIO/Projects/lora_test"
+		}
+	],
+	"settings": {}
+}
